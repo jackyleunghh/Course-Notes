@@ -1,0 +1,28 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.5]
+    % Draw axes
+    \draw[->, thick] (0,0) -- (6,0) node[right] {$C_t$};
+    \draw[->, thick] (0,0) -- (0,5) node[above] {$C_{t+1}$};
+
+    % Draw budget constraint line
+    % Y-intercept: C_t = 0 => C_{t+1} = (1+r_t)Y_t + Y_{t+1}
+    % X-intercept: C_{t+1} = 0 => C_t = Y_t + Y_{t+1}/(1+r_t)
+    \draw[thick, blue] (0,4) node[left] {$(1+r_t)Y_t + Y_{t+1}$} -- (5,0) node[below] {$Y_t + \frac{Y_{t+1}}{1+r_t}$};
+
+    % Draw indifference curve tangent to the budget line
+    % Draw strictly convex indifference curve tangent to the budget line at (2.5, 2)
+    % Using explicit Bezier controls aligned with the tangent slope (-0.8)
+    \draw[thick, red] (0.5, 4.5) 
+        .. controls (0.8, 3.5) and (1.5, 2.8) .. (2.5, 2) 
+        .. controls (3.5, 1.2) and (4.5, 0.7) .. (5.5, 0.5) node[right] {};
+
+
+    % Mark the optimal consumption point (tangency)
+    \filldraw[black] (2.5,2) circle (1.5pt);
+    \draw[dashed] (2.5,0) node[below] {$C_t^*$} -- (2.5,2) -- (0,2) node[left] {$C_{t+1}^*$};
+    
+\end{tikzpicture}
+\end{document}

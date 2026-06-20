@@ -1,0 +1,36 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{amssymb}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.5]
+    % Draw axes
+    \draw[->, thick] (0,0) -- (5.5,0) node[right] {$C_{t+1}$};
+    \draw[->, thick] (0,0) -- (0,5) node[above] {$U'(C_{t+1})$};
+
+
+    % Draw indifference curve tangent to the budget line
+    % Draw strictly convex indifference curve tangent to the budget line at (2.5, 2)
+    % Using explicit Bezier controls aligned with the tangent slope (-0.8)
+    \draw[blue] (0.5, 4.5) .. controls (0.8, 0.8) and (2.5, 0.6) .. (5, 0.5);
+
+    % Markers
+    \coordinate (L) at (1.25, 1.85);
+    \fill[black] (L) circle (1.5pt);
+    \draw[cyan, dashed] (L) -- (1.25, 0) node[below] {$C_{t+1}^L$};
+    \draw[cyan, dashed] (L) -- (0, 1.85) node[left] {$u'(C_{t+1}^L)$};
+
+    \coordinate (H) at (2.5, 0.85);
+    \fill[black] (H) circle (1.5pt);
+    \draw[red, dashed] (H) -- (2.5, 0) node[below] {$C_{t+1}^H$};
+    \draw[red, dashed] (H) -- (0, 0.85) node[left] {$u'(C_{t+1}^H)$};
+
+    \coordinate (M) at (1.875, 1.35);
+    \fill[black] (M) circle (1.5pt);
+    \draw[black, dashed] (M) -- (1.875, 0) node[below] {$\mathbb{E}(C_{t+1})$};
+    \draw[black, dashed] (M) -- (0, 1.35) node[left] {$\mathbb{E}(u'(C_{t+1}))$};
+    
+    \draw[red, dashed] (L) -- (H);
+    
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage{tikz}
+
+\begin{document}
+\begin{tikzpicture}[scale=1.2]
+
+    % Draw Axes
+    \draw[thick, <->] (0, 5) node[left] {$r_t$} -- (0, 0) -- (5, 0) node[below] {$I_t$};
+    
+    % Draw Demand Curve
+    \draw[thick, blue] (0.5, 4) -- (4, 0.5) node[right] {$I^d_t(r_t, A_{t+1}, f_t, K_t)$};
+
+\end{tikzpicture}
+\end{document}

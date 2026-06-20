@@ -1,0 +1,112 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{tikzpicture}[xscale=1.0, yscale=1.0, >=stealth]
+% --- Global Styles ---
+\tikzstyle{axis} = [->, thick]
+\tikzstyle{curve} = [thick]
+\tikzstyle{dashline} = [dashed, thick]
+
+% --- Panel Origin Coordinates ---
+\def\xl{0}    % Left column X-coordinate
+\def\xr{8}    % Right column X-coordinate
+\def\yt{14}   % Top row Y-coordinate
+\def\ym{7}    % Middle row Y-coordinate
+\def\yb{0}    % Bottom row Y-coordinate
+
+% --- Key Alignment Offsets ---
+\def\n0{3.5}     % N_{0,t} intersection offset
+\def\yp0{3.2}    % Y_{0,t} intersection offset
+\def\w0{2.5}     % w_{0,t} intersection offset
+\def\r0{2.2}     % r_{0,t} intersection offset
+
+% ==========================================
+% BOTTOM LEFT: Production Function
+% ==========================================
+\draw[axis] (\xl, \yb) -- (\xl+6, \yb) node[right] {$N_t$};
+\draw[axis] (\xl, \yb) -- (\xl, \yb+5) node[above] {$Y_t$};
+
+% Production Curve
+\draw[curve] (\xl, \yb) to[out=70, in=195] (\xl+\n0, \yb+\yp0) to[out=15, in=180] (\xl+5.5, \yb+3.6) node[right] {$A_t F(K_t, N_t)$};
+
+% Point projections & labels
+\draw[dashline] (\xl+\n0, \yb) node[below] {$N_{0,t}$} -- (\xl+\n0, \yb+\yp0);
+\draw[dashline] (\xl, \yb+\yp0) node[left] {$Y_{0,t}$} -- (\xl+\n0, \yb+\yp0);
+
+% Horizontal dashed line spanning the gap to the reflection panel
+\draw[dashline] (\xl+\n0, \yb+\yp0) -- (\xr+\yp0, \yb+\yp0);
+
+
+% ==========================================
+% MIDDLE LEFT: Labor Market
+% ==========================================
+\draw[axis] (\xl, \ym) -- (\xl+6, \ym) node[right] {$N_t$};
+\draw[axis] (\xl, \ym) -- (\xl, \ym+5) node[above] {$w_t$};
+
+% Enlarged Labor Supply and Demand Curves
+% Extended symmetrically around intersection (\n0=3.5, \w0=2.5)
+% Labels repositioned inward using 'pos' and stacked to prevent overlap
+\draw[curve] (\xl+1.2, \ym+0.2) -- (\xl+5.8, \ym+4.8) node[right] {$N^s(w_t, \theta_t)$}; 
+\draw[curve] (\xl+1.2, \ym+4.8) -- (\xl+5.8, \ym+0.2) node[above right, pos=0.85, align=left] {$N^d(w_t, A_t, K_t)$}; 
+
+% Point projections & labels
+\draw[dashline] (\xl+\n0, \ym+\w0) -- (\xl, \ym+\w0) node[left] {$w_{0,t}$};
+
+% Vertical dashed line dropping down to the production function
+\draw[dashline] (\xl+\n0, \ym+\w0) -- (\xl+\n0, \yb+\yp0);
+
+
+% ==========================================
+% BOTTOM RIGHT: Reflection Panel
+% ==========================================
+\draw[axis] (\xr, \yb) -- (\xr+6, \yb) node[right] {$Y_t$};
+\draw[axis] (\xr, \yb) -- (\xr, \yb+5) node[above] {$Y_t$};
+
+% 45-degree reflection line
+\draw[curve] (\xr, \yb) -- (\xr+4.5, \yb+4.5) node[right] {$Y_t = Y_t$};
+
+% Point projections & labels
+\draw[dashline] (\xr+\yp0, \yb+\yp0) -- (\xr+\yp0, \yb) node[below] {$Y_{0,t}$};
+
+% Vertical dashed line going up to the IS curve panel
+\draw[dashline] (\xr+\yp0, \yb+\yp0) -- (\xr+\yp0, \ym);
+
+
+% ==========================================
+% MIDDLE RIGHT: IS Curve
+% ==========================================
+\draw[axis] (\xr, \ym) -- (\xr+6, \ym) node[right] {$Y_t$};
+\draw[axis] (\xr, \ym) -- (\xr, \ym+5) node[above] {$r_t$};
+
+% IS Curve and vertical Y^s supply line
+\draw[curve] (\xr+0.5, \ym+4.9) -- (\xr+5.5, \ym+0.5) node[right] {$IS$}; 
+\draw[curve] (\xr+\yp0, \ym) -- (\xr+\yp0, \ym+5) node[right] {$Y^s$};
+
+% Point projections & labels
+\draw[dashline] (\xr+\yp0, \ym+2.5) -- (\xr, \ym+2.5) node[left] {$r_{0,t}$};
+
+% Vertical dashed line continuing up to the Keynesian Cross panel
+\draw[dashline] (\xr+\yp0, \ym+5) -- (\xr+\yp0, \yt);
+
+
+% ==========================================
+% TOP RIGHT: Keynesian Cross
+% ==========================================
+\draw[axis] (\xr, \yt) -- (\xr+6, \yt) node[right] {$Y_t$};
+\draw[axis] (\xr, \yt) -- (\xr, \yt+6) node[above] {$Y^d_t$};
+
+% 45-degree Aggregate Supply line
+\draw[curve] (\xr, \yt) -- (\xr+5, \yt+5) node[above] {$Y^d_t = Y_t$};
+
+% Aggregate Demand curve (intersecting 45-deg line at \yp0, \yp0)
+\draw[curve] (\xr, \yt+1.6) -- (\xr+5.5, \yt+4.35) node[right, align=left] {$Y^d_t = C^d(Y_t - G_t, Y_{t+1} - G_{t+1}, r_{0,t}) +$ \\ $\;\;\;\;\;\;\;\;\;I^d(r_{0,t}, A_{t+1}, f_t, K_t) + G_t$};
+
+% Vertical dashed line from X-axis meeting the intersection point
+\draw[dashline] (\xr+\yp0, \yt) -- (\xr+\yp0, \yt+\yp0);
+
+\end{tikzpicture}
+
+\end{document}
