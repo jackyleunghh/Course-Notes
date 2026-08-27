@@ -1,0 +1,42 @@
+\documentclass[tikz,border=5mm]{standalone}
+\usepackage{xcolor}
+
+\begin{document}
+\begin{tikzpicture}[
+    scale=1.5,
+    font=\bfseries,
+    dot/.style={circle, fill=#1, inner sep=1.8pt},
+    dot/.default=black,
+    line width=1.2pt
+]
+
+    % Coordinates
+    \coordinate (root)      at (0, 0);
+    \coordinate (after_top) at (1.5, 1);
+    \coordinate (after_bot) at (1.5, -1);
+    
+    \coordinate (leaf1) at (3.5, 1.8);
+    \coordinate (leaf2) at (3.5, 0.5);
+    \coordinate (leaf3) at (3.5, -1);
+
+    % Level 1 branches (Before)
+    \draw[black] (root) -- (after_top) node[midway, above left] {$B$};
+    \draw[black] (root) -- (after_bot) node[midway, above right] {$S$};
+
+    % Level 2 branches (After)
+    \draw[red] (after_top) -- (leaf1) node[midway, above] {$b$};
+    \draw[red] (after_top) -- (leaf2) node[midway, above] {$s$};
+    \draw[red] (after_bot) -- (leaf3) node[midway, above] {$s$};
+
+    % Decision Nodes & Player Labels
+    \node[dot=black, label=left:Before] at (root) {};
+    \node[dot=red, label={[red]above:After}] at (after_top) {};
+    \node[dot=red] at (after_bot) {};
+
+    % Payoffs (Before: black, After: red)
+    \node[right] at (leaf1) {0 \quad \textcolor{red}{1}};
+    \node[right] at (leaf2) {1 \quad \textcolor{red}{0}};
+    \node[right] at (leaf3) {1 \quad \textcolor{red}{0}};
+
+\end{tikzpicture}
+\end{document}

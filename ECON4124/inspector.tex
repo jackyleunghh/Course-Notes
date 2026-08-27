@@ -1,0 +1,139 @@
+\documentclass[tikz,border=5mm]{standalone}
+\usepackage{xcolor}
+
+\definecolor{gameblue}{RGB}{0, 102, 204}
+\definecolor{gamegreen}{RGB}{76, 175, 53}
+
+\begin{document}
+\begin{tikzpicture}[
+    scale=1.5,
+    font=\bfseries,
+    dot/.style={circle, fill=#1, inner sep=1.8pt},
+    dot/.default=black,
+    line width=1.2pt
+]
+
+    % ==========================================
+    % COORDINATES
+    % ==========================================
+    % Root (Nature)
+    \coordinate (root) at (0, 0);
+
+    % Inspector Nodes
+    \coordinate (insp_top) at (1.6, 1.8);
+    \coordinate (insp_bot) at (1.6, -1.8);
+
+    % President Nodes
+    \coordinate (pres_ty) at (3.5, 3.0);  % Top y-hat
+    \coordinate (pres_tn) at (2.6, 1.0);  % Top n-hat
+    \coordinate (pres_by) at (3.5, -0.6); % Bottom y-hat
+    \coordinate (pres_bn) at (2.6, -2.6); % Bottom n-hat
+
+    % Payoff Leaf Coordinates
+    \coordinate (l_ty_Y) at (5.0, 3.5);
+    \coordinate (l_ty_N) at (5.0, 2.7);
+
+    \coordinate (l_tn_Y) at (4.4, 1.6);
+    \coordinate (l_tn_N) at (4.3, 0.7);
+
+    \coordinate (l_by_Y) at (5.0, -0.1);
+    \coordinate (l_by_N) at (4.9, -1.0);
+
+    \coordinate (l_bn_Y) at (4.4, -2.0);
+    \coordinate (l_bn_N) at (4.3, -2.9);
+
+
+    % ==========================================
+    % LEVEL 1: NATURE (Black)
+    % ==========================================
+    \draw[black] (root) -- (insp_top) 
+        node[midway, above left=2pt] {$y$}
+        node[midway, below right=1pt] {$q$};
+        
+    \draw[black] (root) -- (insp_bot) 
+        node[midway, below left=2pt] {$n$}
+        node[midway, above right=1pt] {$1-q$};
+
+
+    % ==========================================
+    % LEVEL 2: INSPECTOR (Green)
+    % ==========================================
+    % Top Inspector branches
+    \draw[gamegreen] (insp_top) -- (pres_ty) 
+        node[midway, above left=1pt] {$\hat{y}$}
+        node[midway, below right=2pt] {$\alpha$};
+    \draw[gamegreen] (insp_top) -- (pres_tn) 
+        node[midway, below left=1pt] {$\hat{n}$}
+        node[midway, above right=2pt] {$1-\alpha$};
+
+    % Bottom Inspector branches
+    \draw[gamegreen] (insp_bot) -- (pres_by) 
+        node[midway, above left=1pt] {$\hat{y}$}
+        node[midway, below right=2pt] {$\beta$};
+    \draw[gamegreen] (insp_bot) -- (pres_bn) 
+        node[midway, below left=1pt] {$\hat{n}$}
+        node[midway, above right=2pt] {$1-\beta$};
+
+
+    % ==========================================
+    % INFORMATION SETS (President - Blue Dashed)
+    % ==========================================
+    \draw[gameblue, dashed, line width=1.5pt] (pres_ty) -- (pres_by);
+    \draw[gameblue, dashed, line width=1.5pt] (pres_tn) -- (pres_bn);
+
+
+    % ==========================================
+    % LEVEL 3: PRESIDENT (Blue)
+    % ==========================================
+    % Top y-hat branches
+    \draw[gameblue] (pres_ty) -- (l_ty_Y) node[midway, above] {$Y$};
+    \draw[gameblue] (pres_ty) -- (l_ty_N) node[midway, below] {$N$};
+
+    % Top n-hat branches
+    \draw[gameblue] (pres_tn) -- (l_tn_Y) node[midway, above] {$Y$};
+    \draw[gameblue] (pres_tn) -- (l_tn_N) node[midway, below] {$N$};
+
+    % Bottom y-hat branches
+    \draw[gameblue] (pres_by) -- (l_by_Y) node[midway, above] {$Y$};
+    \draw[gameblue] (pres_by) -- (l_by_N) node[midway, below] {$N$};
+
+    % Bottom n-hat branches
+    \draw[gameblue] (pres_bn) -- (l_bn_Y) node[midway, above] {$Y$};
+    \draw[gameblue] (pres_bn) -- (l_bn_N) node[midway, below] {$N$};
+
+
+    % ==========================================
+    % NODES & PLAYER LABELS (Repositioned to avoid overlaps)
+    % ==========================================
+    \node[dot=black, label=left:Nature] at (root) {};
+    
+    \node[dot=gamegreen, label={[gamegreen]above left=2pt:Inspector}] at (insp_top) {};
+    \node[dot=gamegreen] at (insp_bot) {};
+    
+    \node[dot=gameblue, label={[gameblue]above left=2pt:President}] at (pres_ty) {};
+    \node[dot=gameblue] at (pres_tn) {};
+    \node[dot=gameblue] at (pres_by) {};
+    \node[dot=gameblue] at (pres_bn) {};
+
+
+    % ==========================================
+    % PAYOFFS (Inspector: Red, President: Blue)
+    % ==========================================
+    % From Top y-hat
+    \node[right=2pt] at (l_ty_Y) {\textcolor{red}{1} \quad \textcolor{gameblue}{1}};
+    \node[right=2pt] at (l_ty_N) {\textcolor{red}{0} \quad \textcolor{gameblue}{0}};
+
+    % From Top n-hat
+    \node[right=2pt] at (l_tn_Y) {\textcolor{red}{1} \quad \textcolor{gameblue}{1}};
+    \node[right=2pt] at (l_tn_N) {\textcolor{red}{0} \quad \textcolor{gameblue}{0}};
+
+    % From Bottom y-hat
+    \node[right=2pt] at (l_by_Y) {\textcolor{red}{1} \quad \textcolor{gameblue}{0}};
+    \node[right=2pt] at (l_by_N) {\textcolor{red}{0} \quad \textcolor{gameblue}{1}};
+
+    % From Bottom n-hat
+    \node[right=2pt] at (l_bn_Y) {\textcolor{red}{1} \quad \textcolor{gameblue}{0}};
+    \node[right=2pt] at (l_bn_N) {\textcolor{red}{0} \quad \textcolor{gameblue}{1}};
+
+\end{tikzpicture}
+\end{document}

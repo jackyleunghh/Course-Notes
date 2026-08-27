@@ -1,0 +1,1584 @@
+\documentclass[notitlepage]{article}
+\usepackage{amsmath, amssymb}
+\usepackage{enumerate}
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+\usepackage{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{cases}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{cancel}
+
+\usetikzlibrary{shapes.geometric, decorations.markings, arrows.meta}
+\definecolor{gamegreen}{RGB}{58, 107, 34}
+\definecolor{trafficgreen}{RGB}{34, 139, 34}
+\definecolor{trafficyellow}{RGB}{204, 170, 0}
+\definecolor{gameblue}{RGB}{0, 102, 204}
+\definecolor{gamered}{RGB}{204, 51, 34}
+
+
+\newcommand{\bluestrike}[1]{{\color{blue}\xcancel{\color{black}#1}}}
+\newcommand{\redstrike}[1]{{\color{red}\xcancel{\color{black}#1}}}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+Author: Jacky Leung
+
+This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is based on Professor Wu Qinggong's lecture notes and course materials, with a few additional examples by the author.
+
+%These notes are for ECON 4124: Applied Game Theory at HKUST. The content is based on Professor Wu Qinggong’s lecture notes and course materials, with a few additional examples added by the author (marked with \#). While some examples in the lecture notes adapt classic games to modern settings, the original game names are retained here to make online searching easier, while still largely following the lecture notes' framing.
+
+\section{Introduction}
+
+\begin{itemize}
+    \item What is a game?
+    \begin{itemize}
+        \item One or more \textbf{players} take \textbf{actions}, which lead to some \textbf{outcomes}.
+    \end{itemize}
+    \item How can we classify different types of games?
+    \begin{itemize}
+        \item Number of players: Single-player or N-player.
+        \item Move sequences: Static (everyone moves together) or Dynamic (everyone takes turn to move).
+        \item Information: Perfect/Complete or Imperfect/Incomplete.
+        \item Number of rounds: One-shot or Repeated.
+        \item Other classifications: Zero-sum or Non-zero-sum, Deterministic or Probabilistic...
+    \end{itemize}
+    \item In this course, we primarily focus on N-player games with different move sequences and information.
+    \item Loosely speaking, we will be following the framework recognized by the 1994 Nobel Prize in Economics: John Nash provided the foundation for equilibrium in static games, Reinhard Selten extended this to dynamic, multi-stage games, and John Harsanyi incorporated games with incomplete information.
+\end{itemize}
+
+\subsection{Preferences and Utility}
+
+\begin{itemize}
+    \item How do players make choices in a game?
+    \begin{itemize}
+        \item If a player finds choice \(a\) better than choice \(b\), then naturally they would choose \(a\) over \(b\).
+    \end{itemize}
+    \item We use the following notations to represent one's pairwise preferences:
+    \begin{itemize}
+        \item \(a \succ b\): \(a\) is strictly better than \(b\).
+        \item \(a \succeq b\): \(a\) is weakly better than (at least as good as) \(b\).
+        \item \(a \sim b\): \(a\) is as good as \(b\).
+    \end{itemize}
+    \item Consider an example of a simple one-player game.
+    \item \textbf{Example 1.1. Super Mario.} You are playing the classic video game \textit{Super Mario}. On the edge of the cliff, you have two choices: to jump or to keep walking.
+    \begin{itemize}
+        \item As we will do so over the course, we need to mathematically formalize the game.
+        \item The choices of actions are defined as a choice set: \[A = \{jump, walk\}\]
+        \item The outcome that will happen is also a set: \[X = \{survive, die\}\]
+        \item To connect the two, a simple function \(A \to X\) is needed, where \[jump \to survive \text{ and } walk \to die\]
+        \item Before making the decision, you might have no view about the actions per se, but you have preferences about the outcome: \[survive \succ die\]
+        \item Then, you have your derived preference about the actions: \[jump \succ walk\]
+        \item Therefore, a rational you should choose to jump over walking.
+        \item Because an action must leads to an outcome, to simplify our mathematical derivation, we simply talk about preferences over the actions \(A\) most of the time. 
+    \end{itemize}
+    \item For simple situations, we can just represent the preferences by ranking. For example, \(win \succ tie \succ lose\).
+    \begin{itemize}
+        \item \textit{Remark.} We always assume preferences to be transitive. That is, if \(a \succ b\) and \(b \succ c\), then \(a \succ c\).
+    \end{itemize}
+    \item Things might get complicated when we have more, or even infinite choices. (Think about choosing a real number!)
+    \item Economists use something called a utility (or payoff) function that assigns each action \(a \in A\) a number: \[u: A \to \mathbb{R}\]
+    \item \(u\) represents all preferences over \(A\). The higher utility, the better the action: \[\forall a, b \in A: a \succeq b \iff u(a) \ge u(b)\]
+    \item To choose the best action out of all, we find the one that maximizes the utility by solving: \[\max_{a\in A}u(a)\]
+    \item Utility function is not unique; there can be multiple utility functions representing the same preferences, as long as the relative ordering are the same.
+    \begin{itemize}
+        \item For example, $u(win) = 1, u(lose) = 0$ and $v(win) = 100, v(lose) = -100$ are the same.
+    \end{itemize}
+    \item In game theory, sometimes seemingly trivial facts are not actually trivial and need to be proved.
+    \item \textbf{Theorem 1.1.} If \(u: A \to \mathbb{R}\) and \(v: A \to \mathbb{R}\) are two utility functions representing the same preferences over \(A\), then:
+    \[
+    \max_{a\in A}u(a)
+    \]
+    and
+    \[
+    \max_{a\in A}v(a)
+    \]
+    have the same solution.
+    \begin{itemize}
+        \item \textit{Proof.} Since \(u\) and \(v\) represent the same preferences over \(A\), for all \(a, b \in A\), \(a \succeq b\) if and only if \(u(a) \ge u(b)\) and \(v(a) \ge v(b)\). Suppose \(a^*\) is a solution to \(\max_{a\in A}u(a)\), then \(a^* \succeq a\) for every \(a \in A\). This implies that \(v(a^*) \ge v(a)\) for every \(a \in A\), and thus \(a^*\) is a solution to \(\max_{a\in A}v(a)\).
+    \end{itemize}
+\end{itemize}
+
+\section{Static Games and the Nash Equilibrium}
+
+\begin{itemize}
+    \item We start with an example of a two-player game.
+    \item \textbf{Example 2.1. Penalty Shootout (Matching Pennies).} Kicker Messi is facing off goalkeeper De Gea in a Penalty Shootout. Each of them choose a direction (left or right) to kick or to dive.
+    \begin{itemize}
+        \item Messi's actions: \(\{\leftarrow_M, \rightarrow_M\}\)
+        \item De Gea's actions: \(\{\leftarrow_D, \rightarrow_D\}\)
+        \item Like the last example, the players have preferences on the outcome: \(\{Goal, No \;goal\}\), where \(Goal \succ_M No \;goal\) for Messi and \(No \;Goal \succ_D Goal\) for De Gea.
+        \item However, each of them cannot directly derive the outcome from their own action directly, but rather by both of their actions:
+        \[
+        Goal 
+        \begin{cases}
+            (\leftarrow_M, \rightarrow_D) \\
+            (\rightarrow_M, \leftarrow_D)
+        \end{cases}
+        \]
+        \[
+        No\;Goal 
+        \begin{cases}
+            (\leftarrow_M, \leftarrow_D) \\
+            (\rightarrow_M, \rightarrow_D)
+        \end{cases}
+        \]
+        \item Each vector of their actions, \((a_M, a_D)\), is called an \textbf{action profile}.
+        \item The set of all possible action profiles is the Cartesian product of all players' action sets: \(A_M \times A_D\).
+        \item Since each action profile leads to one outcome, the players have preferences over action profiles. For example, for Messi, \((\leftarrow_M, \rightarrow_D) \sim (\rightarrow_M, \leftarrow_D) \succ (\leftarrow_M, \leftarrow_D) \sim (\rightarrow_M, \rightarrow_D)\).
+        \item Their preferences can be represented by utility functions:
+
+        For Messi:
+        \[
+        \begin{cases}
+            (Goal) \; u_M(\leftarrow_M, \rightarrow_D) = u_M(\rightarrow_M, \leftarrow_D) = 1 \\
+            (No \; Goal ) \; u_M(\leftarrow_M, \leftarrow_D) = u_M(\rightarrow_M, \rightarrow_D) = -1
+        \end{cases}
+        \]
+        For De Gea:
+        \[
+        \begin{cases}
+            (No\;Goal) \; u_D(\leftarrow_M, \leftarrow_D) = u_D(\rightarrow_M, \rightarrow_M) = 1 \\
+            (Goal ) \; u_D(\leftarrow_M, \rightarrow_D) = u_D(\rightarrow_M, \leftarrow_D) = -1
+        \end{cases}
+        \]
+        \item The utility values can be summarized using a \textbf{payoff matrix}, also known as a \textbf{normal-form game}:
+
+        \begin{table}[h]
+        \begin{center}
+        \begin{tabular}{llcc}
+        &&
+        \multicolumn{2}{c}{\textcolor{blue}{De Gea}}  \\&& 
+        \textcolor{blue}{$\leftarrow_D$} & 
+        \textcolor{blue}{$\rightarrow_D$} 
+        \\ \cline{3-4} 
+        \multirow{2}{*}{\textcolor{red}{Messi}} & 
+        \multicolumn{1}{c|}{\textcolor{red}{$\leftarrow_M$}} & 
+        \multicolumn{1}{c|}{(\textcolor{red}{-1}, \textcolor{blue}{1})} &
+        \multicolumn{1}{c|}{(\textcolor{red}{1}, \textcolor{blue}{-1})} 
+        \\ \cline{3-4} & 
+        \multicolumn{1}{c|}{\textcolor{red}{$\rightarrow_M$}} & 
+        \multicolumn{1}{c|}{(\textcolor{red}{1}, \textcolor{blue}{-1})} &
+        \multicolumn{1}{c|}{(\textcolor{red}{-1}, \textcolor{blue}{1})} 
+        \\ \cline{3-4} 
+        \end{tabular}
+        \end{center}
+        \end{table}
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item Now, we can formalize what elements constitute a game in general.
+    \begin{itemize}
+        \item A set of players: \(I\).
+        \item Each player \(i \in I\) has a set of available actions: \(A_i\).
+        \item An action profile \(\mathbf{a}\) is a vector of actions taken by each player: \((a_i)_{i \in I} = (a_1, \dots, a_n)\), or from the point of view of player \(i\), \((a_i, \mathbf{a}_{-i})\).
+        \item The set of all possible action profiles: \(\mathbf{A} = \times_{i \in I}A_i\).
+        \item Each player has their own preferences \(\succeq_i\) over \(\mathbf{A}\), which can be represented by utility function \(u_i\).
+        \item Again, preferences over action profiles alone is sufficient to represent the outcomes.
+    \end{itemize}
+    \item We continue with what is perhaps the most well-known example in game theory.
+    \item \textbf{Example 2.2. Prisoner's Dilemma.} Two criminals, Bane and Joker, are arrested and locked in separate interrogation rooms. They must decide whether to defect and betray each other to receive a shorter jail sentence, or to remain silent and cooperate.
+    \begin{itemize}
+        \item Players: \{Bane, Joker\}
+        \item Actions: \(A_B = A_J = \{Cooperate, Defect\}\)
+        \item Outcomes:
+        \[
+        \begin{cases}
+            \text{Both cooperate: 1 year sentence each} \\
+            \text{One defect, one cooperate: The traitor is freed, the other serves 3 years} \\
+            \text{Both defect: 2 years sentence each}
+        \end{cases}
+        \]
+        \item The criminals prefer shorter sentence:
+        \[
+        0\text{ years}\succ 1\text{ year} \succ 2\text{ years} \succ 3\text{ years}
+        \]
+        \item So we can derive the preferences over the action profiles. Furthermore, we can assign the negative of the number of years for the utility. For example, for \textcolor{red}{Bane}:
+        \[
+        \underbrace{(\textcolor{red}{D}, \textcolor{blue}{C})}_{0} \succ \underbrace{(\textcolor{red}{C}, \textcolor{blue}{C})}_{-1} \succ \underbrace{(\textcolor{red}{D}, \textcolor{blue}{D})}_{-2} \succ \underbrace{(\textcolor{red}{C}, \textcolor{blue}{D})}_{-3}
+        \]
+        \item The payoff matrix is therefore:
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{llcc}
+&&
+\multicolumn{2}{c}{\textcolor{blue}{Joker}}  \\&& 
+\textcolor{blue}{Cooperate} & 
+\textcolor{blue}{Defect} 
+\\ \cline{3-4} 
+\multirow{2}{*}{\textcolor{red}{Bane}} & 
+\multicolumn{1}{c|}{\textcolor{red}{Cooperate}} & 
+\multicolumn{1}{c|}{(\textcolor{red}{-1}, \textcolor{blue}{-1})} &
+\multicolumn{1}{c|}{(\textcolor{red}{-3}, \textcolor{blue}{0})} 
+\\ \cline{3-4} & 
+\multicolumn{1}{c|}{\textcolor{red}{Defect}} & 
+\multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{-3})} &
+\multicolumn{1}{c|}{(\textcolor{red}{-2}, \textcolor{blue}{-2})} 
+\\ \cline{3-4} 
+\end{tabular}
+\end{center}
+\end{table}
+
+    \end{itemize}
+    \item To familiarize yourself with the payoff matrix, you should be able to explain this game alone by just looking at it:
+    \item \textbf{Example 2.3. Battle of Sexes.} Adam and Eve are deciding which movie to watch.
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{llcc}
+&&
+\multicolumn{2}{c}{\textcolor{blue}{Eve}}  \\&& 
+\textcolor{blue}{Horror} & 
+\textcolor{blue}{Romance} 
+\\ \cline{3-4} 
+\multirow{2}{*}{\textcolor{red}{Adam}} & 
+\multicolumn{1}{c|}{\textcolor{red}{Horror}} & 
+\multicolumn{1}{c|}{(\textcolor{red}{2}, \textcolor{blue}{1})} &
+\multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{0})} 
+\\ \cline{3-4} & 
+\multicolumn{1}{c|}{\textcolor{red}{Romance}} & 
+\multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{0})} &
+\multicolumn{1}{c|}{(\textcolor{red}{1}, \textcolor{blue}{2})} 
+\\ \cline{3-4} 
+\end{tabular}
+\end{center}
+\end{table}
+\end{itemize}
+
+\subsection{Nash Equilibrium}
+
+\begin{itemize}
+    \item One key question we should ask is: What will happen in the game, or formally, which action profiles will realize?
+    \begin{itemize}
+        \item In fact, it is easier to tell what will not happen instead.
+        \item For example, will the action profile (\textcolor{red}{Horror}, \textcolor{blue}{Romance}) realize in the \textit{Battle of Sexes}?
+        \item No: If Adam knows Eve will choose Romance, he must choose Romance over Horror for a higher utility.
+        \[
+        u_A(\textcolor{red}{Romance}, \textcolor{blue}{Romance}) = 1 > 0 = u_A(\textcolor{red}{Horror}, \textcolor{blue}{Romance})
+        \]
+        \item That means under this action profile, at least one player can change their action to get higher utility. Formally, this is called a \textbf{profitable (unilateral) deviation}.
+    \end{itemize}
+    \item If we rule out all action profiles with profitable deviations, then we are left with what can be realized.
+    \item Such action profile is a (pure strategy) \textbf{Nash equilibrium}.
+    \item \textbf{Definition 2.1.} A (pure strategy) action profile \(\mathbf{a^*} \in \mathbf{A}\) is a Nash equilibrium if and only if for every player \(i\) and every action \(a_i \in A_i\):
+    \[
+    u_i(a^*_i,\mathbf{a}^*_{-i}) \ge u_i(a_i,\mathbf{a}^*_{-i})
+    \]
+    \item How to find a Nash equilibrium in practice?
+    \begin{enumerate}
+        \item For each player \(i\), for every possible actions \(\mathbf{a}_{-i}\) the opponent(s) can make, we rule out all actions that allow profitable deviations; in other words, we only keep the actions that give the highest utility. These are called \textbf{best responses}.
+        \item The action profile(s) we are left with must be the Nash equilibria, since none of the players can deviate in those action profiles.
+    \end{enumerate}
+    \item For simple games with limited actions, we can just put ticks for the best responses.
+    \item For example, in the \textit{Prisoner's Dilemma}, we think about \textcolor{red}{Bane}:
+    \begin{itemize}
+        \item If \textcolor{blue}{Joker} chooses to cooperate, \textcolor{red}{Bane}'s best response is to \textcolor{red}{defect} over \textcolor{red}{cooperate}:
+        \[
+        u_B(\textcolor{red}{D}, \textcolor{blue}{C}) = 0 > -1 = u_B(\textcolor{red}{C}, \textcolor{blue}{C})
+        \]
+        \item If \textcolor{blue}{Joker} chooses to defect, \textcolor{red}{Bane}'s best response is still to \textcolor{red}{defect} over \textcolor{red}{cooperate}:
+        \[
+        u_B(\textcolor{red}{D}, \textcolor{blue}{D}) = -2 > -3 = u_B(\textcolor{red}{C}, \textcolor{blue}{C})
+        \]
+        \item So, Bane's best response is to always defect no matter what Joker does. Since the game works in the exact same way for Joker, we know that always defecting is also the optimal strategy for him.
+        \item Therefore, we are left with the only Nash equilibrium: \((\textcolor{red}{D}, \textcolor{blue}{D})\), which has two ticks in our payoff matrix.
+    \end{itemize}
+\end{itemize}
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{llcc}
+&&
+\multicolumn{2}{c}{\textcolor{blue}{Joker}}  \\&& 
+\textcolor{blue}{Cooperate} & 
+\textcolor{blue}{Defect} 
+\\ \cline{3-4} 
+\multirow{2}{*}{\textcolor{red}{Bane}} & 
+\multicolumn{1}{c|}{\textcolor{red}{Cooperate}} & 
+\multicolumn{1}{c|}{(\textcolor{red}{-1}, \textcolor{blue}{-1})} &
+\multicolumn{1}{c|}{$(\textcolor{red}{-3}, \textcolor{blue}{0^\checkmark})$}
+\\ \cline{3-4} & 
+\multicolumn{1}{c|}{\textcolor{red}{Defect}} & 
+\multicolumn{1}{c|}{$(\textcolor{red}{0^\checkmark}, \textcolor{blue}{-3})$}  &
+\multicolumn{1}{c|}{$(\textcolor{red}{-2^\checkmark}, \textcolor{blue}{-2^\checkmark})$}
+\\ \cline{3-4} 
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{itemize}
+    \item Interestingly, the seemingly more promising option \((\textcolor{red}{C}, \textcolor{blue}{C})\) which gives higher utility to both will not happen at all, because both of them know that defecting must make them better off.
+    \item Another counterintuitive example:
+    \item \textbf{Example 2.4. Voting Game.} Three voters are choosing between candidates A and B using majority rule. Even if all voters prefer candidate A over candidate B, the action profile where all three vote for B is still a Nash equilibrium: no individual voter can change the outcome by unilaterally changing their own vote alone, so a deviation is unprofitable for all them.
+    \begin{itemize}
+        \item The paradox of voting: If you know for certain that your one vote wouldn't change the outcome, why do you still vote?
+    \end{itemize}
+\end{itemize}
+
+\subsection{Best Response}
+
+\begin{itemize}
+    \item For each player \(i\), we can formalize best response as a \textbf{best response function} \(B_i : \mathbf{A}_{-i} \to 2^{A_i}\),
+    \[
+    B_i(\mathbf{a}_{-i}) = \{a_i \in A_i: u_i(a_i,\mathbf{a}_{-i}) \ge u_i(a'_i,\mathbf{a}_{-i}) \;\forall a'_i \in A_i\}
+    \]
+    \item The output of \(B_i\) is a set: For some \(\mathbf{a}_{-i}\), \(B_i(\mathbf{a}_{-i})\) can have multiple, or sometimes even zero best responses.
+    \begin{itemize}
+        \item \textit{Remark.} But for convenience, we sometimes write something like \(B_i = 1\) instead of \(\{1\}\) if the best response is unique.
+    \end{itemize}
+    \item Now, we can prove something we discussed verbally earlier from definition.
+    \item \textbf{Theorem 2.1.} An action profile \(\mathbf{a}^*\) is a Nash equilibrium if and only if for every player \(i\),
+    \[
+    a^*_i \in B_i(\mathbf{a}^*_{-i})
+    \]
+    \begin{itemize}
+        \item \textit{Proof.} If: Suppose \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\), then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-1}^*)\) for all \(a_i \in A_i\), so by definition \(\mathbf{a}^*\) is a Nash equilibrium.
+
+        Only if: Suppose \(\mathbf{a}^*\) is a Nash equilibrium, then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-1}^*)\) for all \(a_i \in A_i\), so by definition \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\).
+    \end{itemize}
+    \item For a two-player game, an action profile \((a_1^*, a_2^*)\) is a Nash equilibrium if and only if:
+    \[
+    \begin{cases}
+        a_1^* \in B_1(a_2^*) \\
+        a_2^* \in B_2(a_1^*)
+    \end{cases}
+    \]
+    \item The tick method is one special application of this intersection method, as all actions we tick are best responses.
+    \item With this being formalized, we can deal with some more complicated games, like games with continuous, and therefore infinite choices.
+    \item \textbf{Example 2.5. Cournot Duopoly.} Two homogeneous firms producing the same goods are deciding the amount of goods to produce: \(q_i \in \mathbb{R}^+\). The goods have the following standard downward-sloping market demand function:
+    \[
+    \mathbb{P}(Q) = \max(a-Q,0)
+    \]
+    where \(a\) is a positive constant and \(Q = q_1 + q_2\).
+
+    Assume both firms have the same constant marginal cost \(c\). We can simply treat maximizing profit as maximizing utility, where:
+    \begin{align*}
+    u_i(q_i, q_{-i}) &= P \cdot q_i - c \cdot q_i \\
+    &=
+    \begin{cases}
+         (a - q_i - q_{-i} - c)q_i &\text{if } q_i + q_{-i} \le a \\
+         0 &\text{if } q_i + q_{-i} > a
+    \end{cases}
+    \end{align*}
+    We solve the maximization problem for Firm 1 by first order condition. If \(q_1 + q_2 \le a\):
+    \begin{align*}
+        \frac{\partial u_1}{\partial q_1}\left((a - q_1 - q_2 - c)q_1\right) &= 0 \\
+        a - 2q_1 - q_2 - c &= 0 \\
+        q_1^* &= \frac{1}{2}(a - q_2 - c)
+    \end{align*}
+    Given that Firm 1 maximizes utility at \(\max\left(\frac{1}{2}(a - q_2 - c),0\right)\), their best response is exactly \(B_1(q_2) = \max\left(\frac{1}{2}(a - q_2 - c),0\right)\). Similarly, \(B_2(q_1) = \max\left(\frac{1}{2}(a - q_1 - c),0\right)\).
+
+    By the intersection method, we solve for the system:
+    \[
+    \begin{cases}
+    q_1 = \max\left(\frac{1}{2}(a - q_2 - c),0\right) \\
+    q_2 = \max\left(\frac{1}{2}(a - q_1 - c),0\right)
+    \end{cases}
+    \]
+    Solving, or graphically, we have the Nash equilibria:
+    \[
+    q_1^* = q_2^* = 
+    \begin{cases}
+    \frac{1}{3}\left(a-c\right) &\text{if } a \ge c \\
+    0  &\text{if } a < c
+    \end{cases}
+    \]
+
+    \newpage
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.5\textwidth}{!}{
+    \input{cournot}
+    }
+    \end{figure}
+
+    \item \textbf{Example 2.5. Hotelling Model.} On a 1-km beach, represented by the interval $[0, 1]$ on the number line, two hot dog sellers are deciding where to place their carts: \(a_i \in [0,1]\). Customers are uniformly distributed along this interval, and each customer goes to whichever cart is closer to them. In other words, each seller aims to capture as much territory as possible, securing all customers closest to their cart while losing the remaining customers to their competitor.
+    
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.5\textwidth}{!}{
+    \input{hotelling}
+    }
+    \end{figure}
+
+    Their utility is simply the length of the interval they occupy:
+    \[
+    u(a_i, a_{-1}) = 
+    \begin{cases}
+        \frac{a_i + a_{-i}}{2} &\text{if } a_i < a_{-i} \\
+        \frac{1}{2} &\text{if } a_i = a_{-i} \\
+        1 - \frac{a_i + a_{-i}}{2} &\text{if } a_i > a_{-i}
+    \end{cases}
+    \]
+    There are two similar ways to find the Nash equilibrium.
+
+    \begin{enumerate}
+        \item Exhaustion: We look at all possible action profiles.
+        \begin{itemize}
+            \item \(a_i \ne a_{-i}\): Not NE; a seller can deviate towards the competitor to expand their territory.
+            \item \(a_i = a_{-i} \ne 0.5\): Not NE; a seller can deviate towards the center to expand their territory.
+            \item \(a_i = a_{-i} = 0.5\): The only NE.
+        \end{itemize}
+        \item Best response: Best response can be an empty set (\(\emptyset\)). For example, \(B_1(0.3)\) is empty.
+        \begin{itemize}
+            \item Any \(a_1 \le 0.3\) is not as good as \(a_1 = 0.4 \implies\) Profitable deviation.
+            \item Any \(a_1 > 0.3\) is not as good as \(\frac{a_1+0.3}{2} \implies\) Profitable deviation.
+        \end{itemize}
+        We can verify that \(B_1(0.5) = 0.5\) is the only place where best response is nonempty. By intersection, (0.5, 0.5) is a NE.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Randomization and Mixed Strategy}
+
+\begin{itemize}
+    \item Let's go back to discuss utility.
+    \item So far we have been choosing from deterministic items (we get what we choose), what if we include lotteries?
+    \item Consider a set of holiday destinations, Vienna, Paris, or stay at Home, where you have \(u(V) = 3, u(P) = 2, u(H) = 1\).
+    \item We add a lottery to your choices: 10\% Vienna or 90\% Home \(= 0.1V + 0.9H\).
+    \item Intuitively, we should know \(V \succ 0.9V + 0.1H \succ H\). But \(0.9V + 0.1H \succ \text{or} \prec P\)?
+    \item To get to the preferences, we first formalize what a lottery is.
+    \item A lottery can be defined as a probability function:
+    \[
+    \sigma: A \to [0,1] \text{ s.t. } \sum_{a \in A}\sigma(a) = 1
+    \]
+    \item For example, \(\sigma(V) = 0.1, \sigma(P) = 0, \sigma(H) = 0.1\).
+    \begin{itemize}
+        \item \textit{Remark.} Deterministic outcomes can also be expressed as lotteries; for example, \(\sigma(V) = 1, \sigma(P) = 0, \sigma(H) = 0\). This is called \textbf{degenerate}.
+    \end{itemize}
+    \item To generalize preferences over lotteries, we don't just focus on one or two lotteries, but all possible ones:
+    \[
+    \Delta(A) = \left\{\sigma:A \to [0,1] \text{ s.t. } \sum_{a \in A}\sigma(a) = 1\right\}
+    \]
+    For example,
+    \[
+    \Delta(\{V, P, H\}) = \left\{\underbrace{x}_{\sigma(V)},\overbrace{y}^{\sigma(P)},\underbrace{z}_{\sigma(H)} \text{ s.t. } x,y,z \in [0,1], x+y+z=1 \right\}
+    \]
+    \item Then, we can use \textbf{expected utility} to represent our preferences over lotteries, \(U: \Delta(A) \to \mathbb{R}\),
+    \[
+    U(\sigma) = \sum_{a \in A}\sigma(a)u(a)
+    \]
+    \begin{itemize}
+        \item \textit{Remark.} Some literature defines expected utility using random variables with the expression \(\mathbb{E}[u(X)]\). While that formal definition is more mathematically complex, the two approaches are connected simply by letting \(\sigma(a) = \mathbb{P}(X = a)\).
+    \end{itemize}
+    \item \(U\) is also called the von Neumann-Morgenstern (vNM) utility function, which links up with the Bernoulli utility function \(u\).
+    \item Then we can calculate the expected utility in the previous example:
+    \[
+    U(P) = 2 > 0.1\cdot3 + 0.9\cdot1 = 1.2 = U(0.1V+0.9H)
+    \]
+    which implies:
+    \[
+    P \succ 0.1V + 0.9H
+    \]
+    \item A key condition in VNM utility theory is that the numerical value of the Bernoulli utility function matters, unlike the ordinal ranking we previously assumed. In other words, the utility function must be cardinal, not merely ordinal.
+    \begin{itemize}
+        \item For example, if \(w(V)=3,w(P)=1.1,w(H)=1\), then \(W(0.1V+0.9H) = 1.2 > 1.1 = W(P)\).
+        \item Mathematically, while an ordinal utility function is invariant to any monotonic transformation, a cardinal utility function is only invariant to a positive affine transformation.
+    \end{itemize}
+    \item Going back to games, what does a lottery mean in player's choices?
+    \begin{itemize}
+        \item \textbf{Mixed strategy}: A player can randomize between available actions. In other words, they choose to play any action \(a_i\) with probability \(\sigma(a_i)\).
+    \end{itemize}
+    \item This way, we expand players' possible actions from \(A\) to \(\Delta(A)\).
+    \item When every player chooses a mixed strategy, we can form a mixed strategy profile \(\boldsymbol{\sigma} = (\sigma_1, \dots, \sigma_n)\).
+    \item The definition of a mixed strategy Nash equilibrium is similar to a pure strategy one.
+    \item \textbf{Definition 2.2.} A mixed strategy profile \(\boldsymbol{\sigma}^*\) is a mixed strategy Nash equilibrium if and only if for every player \(i\) and every mixed strategy \(\sigma_i \in \Delta(A_i)\):
+    \[
+    U_i(\sigma^*_i,\boldsymbol{\sigma}^*_{-i}) \ge U_i(\sigma_i,\boldsymbol{\sigma}^*_{-i})
+    \]
+    \begin{itemize}
+        \item Since a pure strategy is just a degenerate mixed strategy, from now on Nash equilibrium by default refers to a mixed strategy Nash equilibrium.
+    \end{itemize}
+    \item \textbf{Theorem 2.2.} Every game in which there are finitely many players and each player has finitely many actions has at least one mixed strategy Nash equilibrium.
+    \begin{itemize}
+        \item \textit{Proof.} Complicated; Kakutani's fixed-point theorem is used.
+    \end{itemize}
+    \item To find a mixed strategy Nash equilibrium in practice, we need to use a few theorems.
+    \item First we bring back the notion of best response.
+    \item \textbf{Theorem 2.3.} A mixed strategy profile \(\boldsymbol{\sigma}^*\) is a Nash equilibrium if and only if for every player \(i\),
+    \[
+    \sigma^*_i \in B_i(\boldsymbol{\sigma}^*_{-i})
+    \]
+    \item What are included in \(B_i\)?
+    \item Notice that the expected utility is a weighted average of utility from multiple actions.
+    \item It is intuitive to think that given the opponents' mixed strategy profile \(\boldsymbol{\sigma}_{-i}\), the player should only randomize between the best actions. We define the set of best pure actions by \(b_i: \Delta(\mathbf{A}_{-i}) \to 2^{A_i}\),
+    \[
+    b_i(\boldsymbol{\sigma}_{-i}) = \{a_i \in A_i: U_i(a_i,\boldsymbol{\sigma}_{-i}) \ge U_i(a'_i,\boldsymbol{\sigma}_{-i}) \;\forall a'_i \in A_i\}
+    \]
+    \item \textbf{Theorem 2.4.} For any \(\sigma_i \in \Delta(A)\), \(\sigma_i \in B_i(\boldsymbol{\sigma}_{-i})\) if and only if \(\sigma_i(a_i) = 0\) for any \(a_i \notin b_i(\boldsymbol{\sigma}_{-i})\).
+    \begin{itemize}
+        \item \textit{Proof.} Exercise.
+        % \item \textit{Proof.} If: Clearly every pure strategy in \(b_i(\boldsymbol{\sigma}_{-i})\) gives player \(i\) the same payoff \(\overline{U}\) against \(\boldsymbol{\sigma}_{-i}\). Pick any \(\sigma_i\) where \(\sigma_i(a_i) = 0\) for any \(a_i \notin b_i(\boldsymbol{\sigma}_{-i})\), and pick any \(\sigma'_i \in \Delta(A_i)\). Then:
+    \end{itemize}
+    \item Therefore, \(B_i(\boldsymbol{\sigma}_{-i})\) is simply all possible mixes of these best actions:
+    \[
+    B_i(\boldsymbol{\sigma}_{-i}) = \{\sigma_i \in \Delta(A_i) : \sigma_i(a_i) = 0 \text{ if } a_i \notin b_i(\boldsymbol{\sigma}_{-i})
+    \]
+    \item Also, the player should be indifferent between the best actions they have.
+    \item \textbf{Theorem 2.5.} A mixed strategy \(\sigma_i \in B_i(\boldsymbol{\sigma}_{-i})\) if and only if:
+    \[
+    \begin{cases}
+        U_i(a_i, \boldsymbol{\sigma}_{-i}) = U_i(a_i', \boldsymbol{\sigma}_{-i}) &\text{if } \sigma_i(a_i) > 0 \text{ and } \sigma_i(a_i') > 0 \\
+        U_i(a_i, \boldsymbol{\sigma}_{-i}) \ge U_i(a_i', \boldsymbol{\sigma}_{-i}) &\text{if } \sigma_i(a_i) > 0 \text{ and } \sigma_i(a_i') = 0
+    \end{cases}
+    \]
+    \begin{itemize}
+        \item \textit{Proof.} Exercise.
+    \end{itemize}
+    \item As a corollary, a mixed strategy profile \(\boldsymbol{\sigma}^*\) is a Nash equilibrium if and only if for every player \(i\), this property holds for \(\sigma^*_i\).
+    \item Using these, we can generalize a way to find the Nash equilibrium:
+    \begin{enumerate}
+        \item For each player \(i\), for every possible mixed strategy \(\boldsymbol{\sigma}_{-i}\) the opponent(s) can make, we find out every pure actions that maximizes \(U_i(\boldsymbol{\sigma}_{-i})\) and put them in \(b_i(\boldsymbol{\sigma}_{-i})\).
+        \item Then, put all possible mixes of best actions into \(B_i(\boldsymbol{\sigma}_{-i})\) and find the intersection for all players.
+    \end{enumerate}
+    \item Sometimes finding all possible Nash equilibria is difficult, so we just want to check if a specific mixed strategy profile \(\boldsymbol{\sigma}^*\) is an NE or not.
+    \begin{itemize}
+        \item We can make use of Theorem 2.5. For every player \(i\), check if every \(a_i\) where \(\sigma^*_i(a_i)>0\) is a best action against \(\boldsymbol{\sigma}^*_{-i}\).
+    \end{itemize}
+    \item \textbf{Example 2.6. Penalty Shootout with Mixed Strategy.} By the tick method, we can find that the game has no pure strategy Nash equilibrium. How about mixed strategy?
+    \begin{itemize}
+        \item Start from the point of view of Messi. Assume De Gea plays a mixed strategy, where \(\sigma_D(\leftarrow_D) = q\) and \(\sigma_D(\rightarrow_D) = 1-q\). Instead of \(\sigma_D\), we can simply use \(q\) to denote the mixed strategy.
+        \item Then, we calculate Messi's expected utility from each action:
+        \[
+        \begin{cases}
+            U_M(\leftarrow_M, q) = q \cdot U_M(\leftarrow_M, \leftarrow_D) + (1-q) \cdot U_M(\leftarrow_M, \rightarrow_D) = 1-2q \\
+            U_M(\rightarrow_M, q) = q \cdot U_M(\rightarrow_M, \leftarrow_D) + (1-q) \cdot U_M(\rightarrow_M, \rightarrow_D) = 2q-1
+        \end{cases}
+        \]
+        \item Next, by comparing the expected utility in each cases, we can construct \(b_M(q)\):
+        \[
+        b_M(q) =
+        \begin{cases}
+            \{\leftarrow_M\} & \text{if } 0 \le q < 0.5 \iff U_M(\leftarrow_M, q) > U_M(\rightarrow_M, q) \\
+            \{\leftarrow_M, \rightarrow_M\} & \text{if } q = 0.5 \iff U_M(\leftarrow_M, q) = U_M(\rightarrow_M, q) \\
+            \{\rightarrow_M\} & \text{if } 0.5 < q \le 1 \iff U_M(\leftarrow_M, q) < U_M(\rightarrow_M, q)
+        \end{cases}
+        \]
+        \item Finally, denote Messi's mixed strategy by \(\sigma_M(\leftarrow_M) = p\) and \(\sigma_M(\rightarrow_M) = 1-p\), we have the best response:
+        \[
+        B_M(q) = p^* \in
+        \begin{cases}
+            \{1\} &\text{if } 0 \le q < 0.5 \\
+            [0,1] &\text{if } q = 0.5 \\
+            \{0\} &\text{if } 0.5 < q \le 1
+        \end{cases}
+        \]
+        \item Given that De Gea's utility function is exactly opposite, it is easy to derive that:
+        \[
+        B_D(p) = q^* \in
+        \begin{cases}
+            \{0\} &\text{if } 0 \le p < 0.5 \\
+            [0,1] &\text{if } p = 0.5 \\
+            \{1\} &\text{if } 0.5 < p \le 1
+        \end{cases}
+        \]
+        \item Solving, or graphically, we can find the intersection point, which is the unique Nash equilibrium: \((p,q) = (0.5, 0.5)\).
+    \end{itemize}
+
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.35\textwidth}{!}{
+    \input{penalty}
+    }
+    \end{figure}
+
+    \item \textbf{Example 2.7. Volunteer's Dilemma.} \(k\) students are in the classroom, where the professor has just said something confusing. Each of the student decides to raise their hand and ask for clarification or not, but doing so is costly:
+    \[
+    u_i =
+    \begin{cases}
+        2 &\text{if } i \text{ remains silent but someone else asks for clarification} \\
+        1 &\text{if } i \text{ asks for clarification} \\
+        0 &\text{if no one asks for clarification}
+    \end{cases}
+    \]
+    \begin{itemize}
+        \item There are \(k\) possible pure strategy Nash equilibria where exactly one student asks for clarification, which is unrealistic if students don't know each other well.
+        \item We want to find a \textbf{symmetric equilibrium}, where everyone plays the same mixed strategy.
+        \item Suppose every other student randomly asks for clarification with the same probability \(p\), what is my best response?
+        \[
+        \begin{cases}
+            U(Y,p) = 1 \\
+            U(N,p) = [1-(1-p)^{k-1}] \cdot 2
+        \end{cases}
+        \]
+        \item For me to randomize, these two must be equal (indifferent) in the Nash equilibrium, and the same holds for every other student. Therefore, for every student, the probability of asking for clarification is:
+        \[
+        p^* = 1-(0.5)^\frac{1}{k-1}
+        \]
+        \item \(p^*\) decreases with \(k\): The more students, the less likely one asks for clarification.
+        \item Probability of no one asking = \((0.5)^\frac{k}{k-1}\), which is increasing with \(k\). The more students, the less likely anyone asks for clarification at all.
+        \item Free rider problem: An important concept in the study of public goods.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Domination}
+
+\begin{itemize}
+    \item Recall that in \textit{Prisoner's Dilemma}, we say that defecting is strictly better than cooperating. In other words, cooperating is a \textbf{strictly dominated} action.
+    \item \textbf{Definition 2.3.} For player \(i\), an action \(a_i \in A_i\) is \textbf{strictly dominated} by another action \(a_i' \in A_i\) if for any \(\mathbf{a}_{-i} \in \mathbf{A}_{-i}\):
+    \[
+    U_i(a_i, \mathbf{a}_{-i}) < U_i(a_i', \mathbf{a}_{-i})
+    \]
+    \item \textbf{Theorem 2.6.} A strictly dominated action is never played in any Nash equilibrium.
+    \begin{itemize}
+        \item \textit{Proof.} If \(a_i\) is strictly dominated, then \(a_i \notin b_i(\boldsymbol{\sigma}_{-i})\) for any \(\boldsymbol{\sigma}_{-i}\). In a Nash equilibrium \(\boldsymbol{\sigma}^*\), we have \(\sigma_i^* \in B_i(\boldsymbol{\sigma}_{-i})\), and because \(a_i \notin b_i(\boldsymbol{\sigma}_{-i})\), by Theorem 2.4 we must have \(\sigma_i^*(a_i) = 0\).
+    \end{itemize}
+    \item We can derive a corollary: If a strategy profile is a Nash equilibrium, it remains a Nash equilibrium if we delete every strictly dominated actions.
+    \item One use of this is to reduce a game to a \(2 \times 2\) matrix, where we can assign probabilities of \(p\) and \(1-p\), \(q\) and \(1-q\).
+
+    \item Example:
+    
+    \begin{table}[h]
+    \begin{center}
+    \begin{tabular}{llccc}
+    &&
+    \multicolumn{3}{c}{Column} \\&& 
+    $C_1$ & 
+    $C_2$ & 
+    $C_3$
+    \\ \cline{3-5} 
+    \multirow{3}{*}{Row} & 
+    \multicolumn{1}{c|}{$R_1$} & 
+    \multicolumn{1}{c|}{(3, 3)} &
+    \multicolumn{1}{c|}{(1, 1)} &
+    \multicolumn{1}{c|}{(4, 0)}
+    \\ \cline{3-5} & 
+    \multicolumn{1}{c|}{$R_2$} & 
+    \multicolumn{1}{c|}{(2, 1)} &
+    \multicolumn{1}{c|}{(3, 4)} &
+    \multicolumn{1}{c|}{(1, 2)}
+    \\ \cline{3-5} & 
+    \multicolumn{1}{c|}{$R_3$}& 
+    \multicolumn{1}{c|}{(0, 2)} &
+    \multicolumn{1}{c|}{(0, 0)} &
+    \multicolumn{1}{c|}{(0, 1)}
+    \\ \cline{3-5} 
+    \end{tabular}
+    \end{center}
+    \end{table}
+    
+    \begin{enumerate}
+        \item[\textcolor{blue}{1.}] First, for Row player, we can see that \(R3\) is strictly dominated by both \(R1\) and \(R2\), so we can delete the whole row.
+        \item[\textcolor{red}{2.}] Then, in the remaining \(2 \times 3\) game, for Column player, \(C3\) is strictly dominated by \(C2\), so we can delete the whole column.
+        \item[3.] We are left with the final \(2 \times 2\) game, which is helpful to find a mixed strategy Nash equilibrium.
+    \end{enumerate}
+
+    \begin{table}[h]
+    \begin{center}
+    \begin{tabular}{llccc}
+    &&
+    \multicolumn{3}{c}{Column Player} \\&& 
+    $C_1$ & 
+    $C_2$ & 
+    \redstrike{$C_3$}
+    \\ \cline{3-5} 
+    \multirow{3}{*}{Row Player} & 
+    \multicolumn{1}{c|}{$R_1$} & 
+    \multicolumn{1}{c|}{(3, 3)} &
+    \multicolumn{1}{c|}{(1, 1)} &
+    \multicolumn{1}{c|}{\redstrike{(4, 0)}}
+    \\ \cline{3-5} & 
+    \multicolumn{1}{c|}{$R_2$} & 
+    \multicolumn{1}{c|}{(2, 1)} &
+    \multicolumn{1}{c|}{(3, 4)} &
+    \multicolumn{1}{c|}{\redstrike{(1, 2)}}
+    \\ \cline{3-5} & 
+    \multicolumn{1}{c|}{\bluestrike{$R_3$}} & 
+    \multicolumn{1}{c|}{\bluestrike{(0, 2)}} &
+    \multicolumn{1}{c|}{\bluestrike{(0, 0)}} &
+    \multicolumn{1}{c|}{\bluestrike{\redstrike{(0, 1)}}}
+    \\ \cline{3-5} 
+    \end{tabular}
+    \end{center}
+\end{table}
+
+    \item In some games, including \textit{Prisoner's Dilemma}, the pure strategy Nash equilibrium can be found by \textbf{iterated elimination of strictly dominated strategies (IESDS)} alone. The result is a \textbf{dominant equilibrium}.
+    \item \textbf{Example 2.8. Guess \(\frac{2}{3}\) of the Average.} A group of \(n\) players are guessing a real number \(a_i \in [0,100]\). Their goal is to guess as close as the \(\frac{2}{3}\) of the average guess as possible, so:
+    \[
+    u_i = -\left|a_i - \frac{2}{3}\cdot\frac{\sum^n_{j=1} a_j}{n}\right|
+    \]
+    \begin{enumerate}
+        \item First, we can find that the \(\frac{2}{3}\) of the average must not exceed 66.67. Therefore, any number greater than 66.67 are dominated by 66.67 and can be deleted.
+        \item In the remaining choice [0,66.67], the \(\frac{2}{3}\) of the average must not exceed 44.45. Therefore, any number greater than 44.45 are dominated by 44.45 and can be deleted.
+        \item As the iteration goes on, the only remaining available number would be 0. Thus, the unique Nash equilibrium is everyone guessing 0.
+    \end{enumerate}
+
+\end{itemize}
+
+\section{Dynamic Games and the Subgame Perfect Equilibrium}
+
+\begin{itemize}
+    \item We move on to study dynamic games, where players move in turns.
+    \item \textbf{Example 3.1. Dynamic Battle of Sexes.} The game setting is similar, except now Adam can make his choice first.
+    \begin{enumerate}
+        \item Adam's choices: \(\{H, R\}\)
+        \item[2.1.] Eve's choices after Adam chooses \(H\): \(\{H, R\}\)
+        \item[2.2.] Eve's choices after Adam chooses \(R\): \(\{H, R\}\)
+    \end{enumerate}
+    \begin{itemize}
+    \item Same as the static game, there are four possible outcomes, where each outcome give different utilities to each player.
+    \item Instead of using a payoff matrix, we use a \textbf{game tree} to represent the game, also known as an \textbf{extensive-form game}:
+    \newpage
+
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{sexes}
+    }
+    \end{figure}
+    \end{itemize}
+
+    \item Note that after a player makes a move, the next player doesn't necessarily have the same set of choices, or even need to be the same player.
+
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{proposal}
+    }
+    \end{figure}
+
+    \item To formalize a dynamic game, we introduction \textbf{history}:
+    \begin{itemize}
+        \item A history \(h\) is a node on the game tree, which corresponds to a sequence of actions previously taken.
+        \item For example, the initial history \(\emptyset\), an intermediate history \((H_A)\), or a terminal (ending) history \((H_A, H_E)\).
+        \item The set of all possible histories: \(H\).
+        \item The player moving after \(h\): \(\mathbb{P}(h)\).
+        \item Actions available moving after \(h\): \(A(h)\).
+        \item Utility for player \(i\) after a terminal history \(h\): \(u_i(h)\).
+    \end{itemize}
+
+    \item What is a strategy in a dynamic game?
+    \begin{itemize}
+        \item Instead of one single action or pure strategy, here a strategy is a \textbf{contingent plan}.
+    \end{itemize}
+    \item A \textbf{pure strategy} for player \(i\) is a contingent plan that specifies an action from \(A(h)\) at every history \(h\) where player \(i\) needs to move.
+    \item A \textbf{mixed strategy} is a contingent plan that specifies an action from \(\Delta(A(h))\) at every history \(h\) where player \(i\) needs to move.
+    \begin{itemize}
+        \item We will discuss pure strategies most of the time.
+    \end{itemize}
+    \item For example, Eve needs to decide what to play if Adam plays \(H\), as well as that if Adam plays \(R\).
+    \item Then, we can put every players' strategies together into a \textbf{strategy profile}. This can be represented on a game tree.
+
+    \newpage
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{stubborneve}
+    }
+    \end{figure}
+
+    \item Will this strategy profile will realize?
+    \begin{itemize}
+        \item Nash equilibrium: Is there any profitable deviation?
+    \end{itemize}
+    \item Not Nash equilibrium:
+    \begin{itemize}
+        \item Adam can deviate to \(A_A(\emptyset) = R\) instead of \(H\): \(U_A(R,R) = 1 > 0 = U_A(H,R)\).
+        \item Eve can deviate to \(A_E(H_A) = H\) instead of \(R\): \(U_E(H,H) = 1 > 0 = U_E(H,R)\).
+    \end{itemize}
+    \item Consider another strategy profile: 
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{stubborneve2}
+    }
+    \end{figure}
+
+    \item This is a Nash equilibrium: No profitable deviation.
+    \item But looking closer, at the top right subtree, Eve decides to play \(R\) if Adam plays \(H\), which is not something a rational player would do.
+    \begin{itemize}
+        \item We call this a \textbf{non-credible threat}.
+    \end{itemize}
+    \item Even if something doesn't happen at the end, we still want the contingent plan to be rational and optimizing.
+    \item If we see the subtree as a game itself (a \textbf{subgame}), then we want all of the subgames to be optimal, i.e. no profitable deviation.
+    \item \textbf{Definition 3.1.} A strategy profile \(\mathbf{s}\) is a \textbf{subgame perfect equilibrium (SPE)} if there is no profitable deviation for any player in any subgame.
+    \item How to find an SPE in practice?
+    \begin{itemize}
+        \item \textbf{Backward induction}.
+    \end{itemize}
+    \begin{enumerate}
+        \item For the last player(s), find their best actions they can make in each node.
+        \item Knowing what the last player will do, find the best actions the second last player can do.
+        \item Repeat until the first player.
+    \end{enumerate}
+    \item For example,
+    \begin{itemize}
+        \item Eve must choose \(H\) if Adam chooses \(H\), and \(R\) if Adam chooses \(R\).
+        \item Knowing this, Adam must choose \(H\).
+    \end{itemize}
+    \item \textbf{Theorem 3.1.} A strategy profile is a subgame perfect equilibrium if and only if it can be obtained by backward induction.
+    \item \textbf{Example 3.2. Asking for Extra Credit (Chain Store Paradox).} \(n\) students decide whether to go to the professor's office to appeal their exam scores, and the professor decides whether to comply if a student appeals. The students want higher scores, but staying away is better than going and receiving no extra points. The professor prefers that students do not come, but if they do, complying is easier than refusing.
+
+    \begin{itemize}
+        \item We start with a 1-student case.
+        
+        \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{chainstore}
+        }
+        \end{figure}
+
+        \begin{enumerate}
+            \item If the student comes, the professor must choose to comply.
+            \item Knowing this, the student must choose to go than not going.
+        \end{enumerate}
+
+        \item If we extend this to \(n\) students coming one by one, the unique SPE is every student going and the professor complying with everyone.
+        \item The \textbf{chain store paradox}: Why do new companies keep entering, and why don't incumbents start a price war?
+        \end{itemize}
+
+    \item \textbf{Example 3.3. Centipede Game.} Two players, \(A\) and \(B\), choose to either stop and keep 80\% of the jackpot, or double it and pass to the other player to choose.
+
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.7\textwidth}{!}{
+    \input{centipede}
+    }
+    \end{figure}
+
+    \begin{enumerate}
+        \item In the final round, \(B\) must stop and keep most of the money.
+        \item In the second last round, \(A\) knows \(B\) must choose to stop after them. Not wanting this to happen, they must stop there instead of passing it down.
+        \item The same goes until the beginning: the SPE is \(A\) stopping at the very beginning, giving both players the minimal payoff.
+    \end{enumerate}
+
+    \item Sometimes we don't need to have two or more players, but a single player in different stages.
+
+    \item \textbf{Example 3.4. Self-control Game.} A player decides to go to a burger place or a salad place. They can order either burger or salad in the burger place, whereas they can only order salad in a salad place. They prefer to eat salad right now, but if they see a burger later, they will be tempted to order one.
+
+    \newpage
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{selfcontrol}
+    }
+    \end{figure}
+
+    \begin{itemize}
+        \item SPE: Go to salad place now.
+        \item This is called a \textbf{commitment device}.
+    \end{itemize}
+
+    \item Of course, we can study games with continuous choices as well.
+
+    \item \textbf{Example 3.5. Ultimatum Game.} Player 1 proposes how to split \$100 dollars: \((x, 100-x)\). Player 2 chooses to accept or not; if they accept, split accordingly, otherwise, the money is gone, and furthermore, Player 2 is fined with \$1 for rejecting.
+
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.4\textwidth}{!}{
+    \input{ultimatum}
+    }
+    \end{figure}
+
+    \begin{enumerate}
+        \item Since \(100-x > -1\) for all \(x \in [0,100]\), Player 2 must accept no matter what \(x\) is.
+        \item Knowing this, Player 1 must maximize. The SPE is \(x = 100\): Player 1 keeps all the money.
+    \end{enumerate}
+    
+\end{itemize}
+
+\section{Static Games with Incomplete Information and the Bayes Nash Equilibrium}
+
+\begin{itemize}
+    \item In all previous models, players' strategies depends on the fact that they know exactly about the opponent(s).
+    \item What if they don't know who they are playing against?
+    \item \textbf{Example 4.1. Battle of Sexes with Incomplete Information.} Suppose Eve can be one of the two ``types" with probability \(p\), but Adam doesn't know which type of Eve he is playing against, then we have two possible games:
+
+    \newpage
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{llcc}
+    &&
+    \multicolumn{2}{c}{\textcolor{blue}{Eve}}  \\&& 
+    \textcolor{blue}{Horror} & 
+    \textcolor{blue}{Romance} 
+    \\ \cline{3-4} 
+    \multirow{2}{*}{\textcolor{red}{Adam}} & 
+    \multicolumn{1}{c|}{\textcolor{red}{Horror}} & 
+    \multicolumn{1}{c|}{(\textcolor{red}{2}, \textcolor{blue}{1})} &
+    \multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{0})} 
+    \\ \cline{3-4} & 
+    \multicolumn{1}{c|}{\textcolor{red}{Romance}} & 
+    \multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{0})} &
+    \multicolumn{1}{c|}{(\textcolor{red}{1}, \textcolor{blue}{2})} 
+    \\ \cline{3-4}
+    \multicolumn{4}{c}{} \\
+    \multicolumn{4}{c}{``Normal" Eve}
+    \end{tabular}
+    \end{table}
+
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{llcc}
+    &&
+    \multicolumn{2}{c}{\textcolor{blue}{Eve}}  \\&& 
+    \textcolor{blue}{Horror} & 
+    \textcolor{blue}{Romance} 
+    \\ \cline{3-4} 
+    \multirow{2}{*}{\textcolor{red}{Adam}} & 
+    \multicolumn{1}{c|}{\textcolor{red}{Horror}} & 
+    \multicolumn{1}{c|}{(\textcolor{red}{2}, \textcolor{blue}{0})} &
+    \multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{1})} 
+    \\ \cline{3-4} & 
+    \multicolumn{1}{c|}{\textcolor{red}{Romance}} & 
+    \multicolumn{1}{c|}{(\textcolor{red}{0}, \textcolor{blue}{2})} &
+    \multicolumn{1}{c|}{(\textcolor{red}{1}, \textcolor{blue}{0})} 
+    \\ \cline{3-4}
+    \multicolumn{4}{c}{} \\
+    \multicolumn{4}{c}{``Moody" Eve}
+    \end{tabular}
+    \end{table}
+
+    \begin{itemize}
+        \item Because Eve's type is her \textbf{private information}, she can play her strategy accordingly: \(\sigma_E^N \in \Delta(\{H,R\})\) and \(\sigma_E^M \in \Delta(\{H,R\})\); but because Adam doesn't know, he can only play one strategy: \(\sigma_A \in \Delta(\{H,R\})\).
+    \end{itemize}
+
+    \item Formally, in a game with incomplete information:
+    \begin{itemize}
+        \item Each player \(i\) has a set of \textbf{type}: \(T_i\). For example, \(T_A = \{Normal\}\) and \(T_E = \{Normal, Moody\}\).
+        \item \(t_i \in T_i\) is the private information of player \(i\). Other players don't know other players' type, but know the distribution; for example, \(\mathbb{P}(t_E = M) = p\).
+        \item Utility depends both the action profile and the type profile. For example, \(u_E((H,H)|(n,n)) = 1\), \(u_E((H,H)|(n,m)) = 0\).
+        \item A strategy profile specifies a mixed strategy for every type of player. For example, \((\sigma_A, \sigma_E^N, \sigma_E^M)\).
+    \end{itemize}
+
+    \item \textbf{Definition 4.1.} A \textbf{Bayes Nash equilibrium (BNE)} is a strategy profile such that there is no profitable deviation for every type of any player.
+
+    \item Consider the pure strategy profile: \(a_A = H, a_E^N = H, a_E^M = R\).
+    \begin{itemize}
+        \item Clearly both types of Eve have no incentive to deviate.
+        \item For Adam,
+        \[
+        \begin{cases}
+            U_A(H) = 2(1-p) + 0p = 2-2p \\
+            U_A(R) = 0(1-p) + 1p = p
+        \end{cases}
+        \]
+        \item Therefore, Adam has no profitable deviation if \(2-2p \ge p\). If \(p \le \frac{2}{3}\), this pure strategy profile is a BNE.
+        \item Intuition: If Eve is less likely to be Moody, Adam is safe to choose Horror.
+    \end{itemize}
+    \item When more players have more than one possible type, the \textbf{probability distribution} becomes important.
+    \item \textbf{Example 4.2. Battle of Sexes with Joint Distribution.} Suppose now Adam can also be moody, and the utility for both players are given by the follows:
+    \[
+    \begin{cases}
+        \text{Watching preferred movie alone} & \text{: 0 if normal, 2 if moody} \\ 
+        \text{Watching less preferred movie alone} & \text{: 0 if normal, 1 if moody} \\ 
+        \text{Watching preferred movie with company} & \text{: 2 if normal, 0 if moody} \\ 
+        \text{Watching less preferred movie with company} & \text{: 1 if normal, 0 if moody} \\ 
+    \end{cases}
+    \]
+    \newpage
+    Furthermore, the joint probability distribution of types is given by:
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{llcc}
+    &&
+    \multicolumn{2}{c}{Eve}  \\&& 
+    Normal & 
+    Moody
+    \\ \cline{3-4} 
+    \multirow{2}{*}{Adam} & 
+    \multicolumn{1}{c|}{Normal} & 
+    \multicolumn{1}{c|}{0.5} &
+    \multicolumn{1}{c|}{0.1} 
+    \\ \cline{3-4} & 
+    \multicolumn{1}{c|}{Moody} & 
+    \multicolumn{1}{c|}{0.1} &
+    \multicolumn{1}{c|}{0.3} 
+    \\ \cline{3-4}
+    \end{tabular}
+    \end{table}
+
+    \begin{itemize}
+        \item How does each player determine their opponent?
+        \item To us, Eve is normal with probability \(0.5+0.1=0.6\).
+        \item But to the players, they rely on their \textbf{posterior belief}.
+        \item For example, to Normal Adam,
+        \[
+        \mathbb{P}(t_E = N | t_A = N) = \frac{\mathbb{P}(t_E = N, t_A = N)}{\mathbb{P}(t_A = N)} = \frac{0.5}{0.5+0.1} = \frac{5}{6}
+        \]
+        \item To check if a strategy profile is a BNE, we simply check for every type of every player whether there is any profitable deviation.
+        \item Consider the pure strategy profile where Normal Adam, Moody Adam and Normal Eve play H, and Moody Eve plays R.
+        \item For Normal Adam,
+        \[
+        \begin{cases}
+            U_A^N(H) = \frac{5}{6} \cdot 2 + \frac{1}{6} \cdot 0 = \frac{5}{3} \\
+            U_A^N(R) = \frac{5}{6} \cdot 0 + \frac{1}{6} \cdot 1 = \frac{1}{6}
+        \end{cases}
+        \]
+        \item One can verify that all types of players have no profitable deviation, so this is a BNE.
+    \end{itemize}
+
+    \item One of the most common use of the model is \textbf{auction}, where each player's valuation for the goods can be viewed as their private information, i.e. type.
+
+    \item \textbf{Example 4.3. Sealed-bid auction.} A house is being auctioned off. \(n\) players are interested, and each of them has their own valuation \(t_i\) for the house. Given a final price \(p\), their utility is given by:
+    \[
+    u_i = 
+    \begin{cases}
+        t_i-p & \text{if } i \text{ wins} \\
+        0 & \text{otherwise}
+    \end{cases}
+    \]
+    \begin{itemize}
+        \item \textit{Remark.} For simplicity, suppose there is no ties.
+        \item How to determine who wins?
+        \item For a static game, we use a \textbf{sealed-bid auction}, where everyone submits a bid \(a_i \in \mathbb{R}^+\) at once and the highest bidder wins.
+        \item How much does the winner, bidder \(i\), pay?
+        \item First price (highest bid): \(p=a_i\), Second price (second highest bid): \(p=\max_{j\ne i}a_j\)...
+        \item To make the auction ``fair", we naturally want everyone's bid to reflect their true valuation in the equilibrium. That's why we study \textbf{mechanism design}.
+    \end{itemize}
+    \item \textbf{Example 4.3.1. Sealed-bid Second-price Auction.}
+    \begin{itemize}
+        \item For a second-price auction, we claim that everyone bidding their own type is a BNE.
+        \item Showing this is simple: We can show that bidding one's own type is always weakly better, i.e. a best strategy, regardless of other bidders' valuations or bids.
+        \item In other words: Will bidder \(i\) be better off in any cases if they don't truthfully report, i.e. \(a_i \ne t_i\)?
+        \item Let \(a_{-i} = \max_{j\ne i}a_j\) be the highest competing bid. Note that this is the only other bid we need to concern, and the utility function is:
+        \[
+        u_i = 
+        \begin{cases}
+            t_i - a_{-i} & \text{if } a_i > a_{-i} \\
+            0 & \text{otherwise}
+        \end{cases}
+        \]
+        \item Consider underbidding (\(a_i < t_i\)):
+        \begin{enumerate}
+            \item \(a_{-i} < a_i\): Bidder \(i\) wins the auction under both strategies. Payoff = \(t_i - a_{-i}\).
+            \item \(a_i < a_{-i} < t_i\): Bidder \(i\) loses the auction and their payoff is 0. However, if they truthfully bids \(t_i\) instead, they can win and their payoff can be increased to \(t_i - a_{-i} > 0\).
+            \item \(a_{-i} > t_i\): Bidder \(i\) loses the auction under both strategies. Payoff = \(0\).
+        \end{enumerate}
+        \item Consider overbidding (\(a_i > t_i\)):
+        \begin{enumerate}
+            \item \(a_{-i} < t_i\): Bidder \(i\) wins the auction under both strategies. Payoff = \(t_i - a_{-i}\).
+            \item \(t_i < a_{-i} < a_i\): Bidder \(i\) win the auction and their payoff is \(t_i - a_{-i} < 0\). However, if they truthfully bids \(t_i\) instead, they can lose and their payoff can be increased to \(0\).
+            \item \(a_{-i} > a_i\): Bidder \(i\) loses the auction under both strategies. Payoff = \(0\).
+        \end{enumerate}
+        \item As truthfully bidding is always a best response, everyone doing so is a BNE.
+    \end{itemize}
+
+    \item An alternative proof:
+    \begin{itemize}
+        \item Consider the following cases:
+    \begin{enumerate}
+        \item \(a_{-i} < t_i\): As \(t_i - a_{-i} > 0\), \(u_i\) is maximized when Bidder \(i\) wins the auction, i.e. bidding \(a_i > a_{-i}\). As \(t_i > a_{-i}\), bidding \(a_i = t_i\) is a best response.
+        \item \(a_{-i} > t_i\): As \(t_i - a_{-i} < 0\), \(u_i\) is maximized when Bidder \(i\) loses the auction, i.e. bidding \(a_i < a_{-i}\). As \(t_i < a_{-i}\), bidding \(a_i = t_i\) is a best response.
+        \item \(a_{-i} = t_i\): Although we didn't formalize a tie-breaking rule, it is easy to see that the payoff is always 0 in this case, so any bid is a best response.
+        \end{enumerate}
+        \item As \(a_i = t_i\) is a best response in every cases, everyone bidding truthfully is a BNE.
+    \end{itemize}
+    
+    \item \textbf{Example 4.3.2. Sealed-bid First-price Auction.}
+    \begin{itemize}
+        \item In a first-price auction, bidding one's own type is not necessarily a best strategy. For example, if one wins the auction by bidding \(a_i = t_i\), it is possible that they lower their bid a bit and still win while paying less.
+        \item For simplicity, we study a case where there are only two bidders, where \(t_1, t_2 \overset{\mathrm{i.i.d.}}{\sim}\text{Uniform}(0,1)\).
+        \item The utility function is:
+        \[
+        u_i = 
+        \begin{cases}
+            t_i - a_i & \text{if } a_i > a_{-i} \\
+            0 & \text{otherwise}
+        \end{cases}
+        \]
+        \item We claim that bidding \underline{half} of their types, \(a_i = \frac{t_i}{2}\), is a BNE.
+        \item We start from the perspective of Bidder 1. We want to show that bidding \(a_1 = \frac{t_1}{2}\) is a best response against \(a_2 = \frac{t_2}{2}\), that is, their expected utility is maximized this way.
+        \item Note that since \(t_2\) is at most 1, \(a_2\) is at most \(\frac{1}{2}\), so Bidder 1 only needs to consider \(a_1 \in [0,\frac{1}{2}]\).
+        \item We first find the probability of winning:
+        \[
+        \mathbb{P}(a_1 > a_2) = \mathbb{P}(a_1 > \frac{t_2}{2}) = \mathbb{P}(t_2 < 2a_1)
+        \]
+        \item Since \(t_2 \sim \text{Uniform}(0,1)\) and \(2a_1 \in [0,1]\), we have \(\mathbb{P}(t_2 < 2a_1) = 2a_1\).
+        \item The expected utility is therefore:
+        \[
+        U_1 = 2a_1 \cdot (t_1 - a_1)
+        \]
+        Taking first order condition:
+        \begin{align*}
+            \frac{\partial U_1}{\partial a_1} = 2t_1 - 4a_1 &= 0 \\
+            a_1^* &= \frac{t_1}{2}
+        \end{align*}
+        \item By symmetry and intersection, a BNE is therefore \((a_1^*, a_2^*) = (\frac{t_1}{2}, \frac{t_2}{2})\).
+    \end{itemize}
+    \item While both types of auction guarantee the bidder with the highest valuation can win, which one can generate higher revenue for the seller?
+    \begin{itemize}
+        \item \textbf{Revenue Equivalence Theorem}: Any auction mechanism yield the same expected revenue under risk neutrality and i.i.d. valuations.
+    \end{itemize}
+    \item For example, in a two-player, \(t_1, t_2 \overset{\mathrm{i.i.d.}}{\sim}\text{Uniform}(0,1)\) setting:
+    \item In a second-price auction, \(p=\min\{t_1,t_2\}\). Then, 
+    \[
+    \mathbb{P}(\min\{t_1,t_2\}>x) = \mathbb{P}(t_1 > x) \cdot \mathbb{P}(t_2 > x) = (1-x)^2
+    \]
+    By the tail sum formula, we have the expected revenue:
+    \[
+    \mathbb{E}[\min\{t_1,t_2\}] = \int_0^1\mathbb{P}(\min\{t_1,t_2\}>x)dx = \int_0^1(1-x)^2dx = \frac{1}{3}
+    \]
+    \item In a first-price auction, \(p = \max\{\frac{t_1}{2},\frac{t_2}{2}\} = \frac{1}{2}\max\{t_1,t_2\}\). Then,
+    \[
+    \mathbb{P}(\max\{t_1,t_2\}<x) = \mathbb{P}(t_1 < x) \cdot \mathbb{P}(t_2 < x) = x^2
+    \]
+    By the tail sum formula, we have the expected revenue:
+    \[
+    \mathbb{E}[\frac{1}{2}\max\{t_1,t_2\}] = \frac{1}{2}\int_0^1\mathbb{P}(\max\{t_1,t_2\}>x)dx = \frac{1}{2}\int_0^1 (1-x^2) dx = \frac{1}{3}
+    \]
+    \item In the previous example, valuation is \underline{subjective} to each bidder. What if the goods have an \underline{objective} value, and each bidder only knows a part of it?
+    \item \textbf{Example 4.4. Common Value Auction.} Two clubs, 1 and 2, scout the same young footballer. They observe the mental and physical qualities of the footballer, \(t_1, t_2 \overset{\mathrm{i.i.d.}}{\sim}\text{Uniform}(0,1)\), respectively, and the footballer's true value is \(v=t_1+t_2\). Both of them take part in a first-price auction, and the utility function is:
+    \[
+    u_i =
+    \begin{cases}
+        t_1 + t_2 - a_i & \text{if } a_i > a_{-i} \\
+        0 & \text{otherwise}
+    \end{cases}
+    \]
+    \begin{itemize}
+        \item We claim that both bidding their own type \(a_i = t_i\) is a BNE.
+        \item From the perspective of Bidder 1, suppose Bidder 2 bids \(a_2 = t_2\). Since \(a_2 = t_2 \le 1\), Bidder 1 only needs to consider \(a_1 \in [0,1]\) to win. Then, the probability of winning is:
+        \[
+        \mathbb{P}(a_1 > a_2) = \mathbb{P}(t_2 < a_1)
+        \]
+        Since \(t_2 \sim \text{Uniform}(0,1)\) and \(a_1 \in [0,1]\), we have \(\mathbb{P}(t_2 < a_1) = a_1\).
+        %\item To compute expected utility, we first need to find an expectation conditional on winning:
+        %\[
+        %\mathbb{E}[t_2 \mid t_2 < a_1] = \frac{a_1}{2}
+        %\]
+        \item The expected payoff is then:
+        \begin{align*}
+            U_1 &= \mathbb{P}(t_2 < a_1) \cdot \mathbb{E}[t_1 + t_2 - a_1 \mid t_2 < a_1] \\
+            &= \mathbb{P}(t_2 < a_1) \cdot (\mathbb{E}[t_1 \mid t_2 < a_1] + \mathbb{E}[t_2 \mid t_2 < a_1] - \mathbb{E}[a_1 \mid t_2 < a_1]) \\
+            &= a_1 \cdot (t_1 + \frac{a_1}{2} - a_1) \\
+            &= a_1t_1 - \frac{a_1^2}{2}
+        \end{align*}
+        \item Taking first order condition:
+        \begin{align*}
+            \frac{\partial U_1}{\partial a_1} = t_1 - a_1 &= 0 \\
+            a_1^* &= t_1
+        \end{align*}
+        \item By symmetry and intersection, a BNE is therefore \((a_1^*, a_2^*) = (t_1, t_2)\).
+        \item An alternative graphical approach to get the expected utility:
+        \begin{figure}[h]
+        \centering
+        \resizebox{0.35\textwidth}{!}{
+        \input{commonvalue}
+        }
+        \end{figure}
+        
+        Hence,
+        \[
+        U_1 = \int_0^{a_1}t_1+t_2-a_1dt_2 = a_1t_1 - \frac{a_1^2}{2}
+        \]
+    \end{itemize}
+    \item Suppose \(t_1 = x\), then at the beginning, the expected value of the footballer is:
+    \[
+    \mathbb{E}[t_1+t_2\mid t_1=x] = \mathbb{E}[t_1 \mid t_1=x] + \mathbb{E}[t_2\mid t_1=x] = x + 0.5
+    \]
+    However, if Bidder \(1\) wins, the expected value becomes:
+    \[
+    \mathbb{E}[t_1+t_2\mid t_1=x, t_2 < x] = \mathbb{E}[t_1 \mid t_1=x, t_2 < x] + \mathbb{E}[t_2\mid t_1=x, t_2 < x] = x + 0.5x \le x + 0.5
+    \]
+    which implies winning is a bad news.
+    \begin{itemize}
+        \item \textbf{Winner's curse}: You winning means that your competitors have more negative information than you do, so they have lower valuations. This is an example of \textbf{adverse selection}.
+    \end{itemize}
+\end{itemize}
+
+\section{Dynamic Games with Imperfect/Incomplete Information and the Perfect Bayesian Equilibrium}
+
+\subsection{Imperfect Information}
+\begin{itemize}
+    \item \textbf{Example 5.1. Asking for Extra Credit Extended.} Suppose when the student goes to the professor's office, he can choose to be prepared or unprepared.
+    \newpage
+    \begin{figure}[h]
+    \centering
+    \resizebox{0.3\textwidth}{!}{
+    \input{pup}
+    }
+    \end{figure}
+    \begin{itemize}
+        \item By backward induction, we can find that in the unique SPE, the professor always complies if the student is prepared and never complies if the student is unprepared.
+        \item The professor makes different moves depending on whether the student is prepared or not.
+        \item However, what if he doesn't know if the student is prepared?
+    \end{itemize}
+
+    \item In a dynamic game with imperfect information:
+    \begin{itemize}
+        \item A player has some \textbf{information sets}, which contain histories that they cannot tell apart. For example:
+        
+        \begin{figure}[h]
+        \centering
+        \resizebox{0.3\textwidth}{!}{
+        \input{driver}
+        }
+        \end{figure}
+
+        \item If the driver is normal, he has three information sets: \(\{red\}, \{green\}, \{yellow\}\). However, a color blind driver only has two: \(\{red, green\}, \{yellow\}\)
+        \item A player can only play a strategy for each information set \(I\), i.e. what they see.
+    \end{itemize}
+
+    \item How do players make decisions under imperfect information?
+    \begin{itemize}
+        \item They have \textbf{belief} for what is going to be played in any information set.
+    \end{itemize}
+
+    \item Formally, a \textbf{belief system} \(\mu\) constitutes of beliefs \(\mu(x)\) for all \(x\) in any information set \(I\), where \(\sum_{x\in I}\mu(x) = 1\), which assigns conditional probabilities of being at history \(x\) given that information set \(I\) has been reached.
+
+    \item \textbf{Example 5.1.1. Asking for Extra Credit with Imperfect Information.} Suppose the professor doesn't know if the student who comes is prepared or not. However, he believes that the student is prepared with probability \(\mu(P) = p\).
+    
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.3\textwidth}{!}{
+        \input{pupbelief}
+        }
+    \end{figure}
+    
+    Then, the professor should make their decision based on their expected utility:
+    \[
+    \begin{cases}
+        U_P(C) = 1 \cdot p + 1 \cdot (1-p) = 1  \\
+        U_P(NC) = 0 \cdot p + 2 \cdot (1-p) = 2-2p
+    \end{cases}
+    \]
+    Therefore, complying is a best response if and only if \(1 \ge 2-2p \implies p \ge 0.5\).
+
+    %\newpage
+    Consider this strategy profile where \(p=1\):
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.3\textwidth}{!}{
+        \input{pupbelief1}
+        }
+    \end{figure}
+    \begin{itemize}
+        \item \(p=1 \ge 0.5 \implies C\) is a best response according to the professor's belief.
+        \item If the student somehow knows the professor's belief and thus what they will do, by backward induction they should not prepare
+        \item However, the professor believes that the student is prepared, so the belief is \textbf{inconsistent}.
+    \end{itemize}
+
+    \item In a dynamic game with imperfect information, an equilibrium does not only require best response, but two conditions.
+    \item \textbf{Definition 5.1.} A \textbf{perfect Bayesian equilibrium (PBE)} is a pair consisting of a strategy profile \(\sigma\) and a belief system \(\mu\), where:
+    \begin{enumerate}
+        \item \textbf{Sequential rationality}: For each player, their equilibrium strategy is a best response against other players' equilibrium strategies in every information set after which they move with respect to the beliefs given by \(\mu\).
+        \item \textbf{Belief consistency}: For each player, their belief given by \(\mu\) is consistent with \(\sigma\) by conditional probability computed by Bayes' rule.
+    \end{enumerate}
+
+    \item In the previous example, (1) is satisfied but (2) is not. We use a mixed strategy example to show the other case.
+
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.3\textwidth}{!}{
+        \input{pupmixed}
+        }
+    \end{figure}
+    \begin{itemize}
+        \item Is this belief consistent?
+        \item Suppose the professor sees a student comes, then:
+        \[
+        \mathbb{P}(P \mid \{P, UP\}) = \frac{\mathbb{P}(P)}{\mathbb{P}(\{P, UP\})} = \frac{0.81}{0.81+0.09} = 0.9
+        \]
+        which is consistent with the belief \(p=0.9\).
+        \item However, if the professor must comply, the student's best response is to never prepare, instead of playing this mixed strategy.
+    \end{itemize}
+
+    \item In practice, one way to find a PBE can be seen as a more complicated backward induction:
+    \begin{enumerate}
+        \item For the last player(s), find what are the best responses under all conditions of their belief.
+        \item For every possible actions, find the best responses the previous player can take.
+        \item Check if this action is consistent with the belief.
+    \end{enumerate}
+
+    \item In the previous example, there are two possibilities in step (1):
+    \item If \(p \ge 0.5\) and the professor complies:
+    \begin{itemize}
+        \item The student should not prepare by backward induction.
+        \item Then, the actual probability of the student preparing is 0, as opposed to the belief \(p \ge 0.5\).
+        \item Belief consistency is violated: No valid PBE under this belief.
+    \end{itemize}
+    \item If \(p \le 0.5\) and the professor does not comply:
+    \begin{itemize}
+        \item By backward induction, the student must not go to the office.
+        \item Is belief consistent?
+        \item Checking by Bayes' rule:
+        \[
+        \mathbb{P}(P \mid \{P, UP\}) = \frac{\mathbb{P}(P)}{\mathbb{P}(\{P, UP\})} = \frac{0}{0}?
+        \]
+        \item What happened here?
+        \item There are \textbf{off-equilibrium paths}. In fact, if nothing in an information set is played, one is allowed to have any belief.
+        \item PBE: Student never goes, Professor believes in any \(p \le 0.5\) and (hypothetically) never complies.
+    \end{itemize}
+    
+\end{itemize}
+
+\subsection{Incomplete Information}
+
+\begin{itemize}
+    \item What's the difference between \textbf{imperfect} and \textbf{incomplete} information?
+    \begin{itemize}
+        \item Under imperfect information, you don't know what your opponent has played. Under incomplete information, you simply don't know who your opponent is; or to be precise, the \textbf{type} of your opponent.
+    \end{itemize}
+    %\newpage
+    \item \textbf{Example 5.2. Asking for Extra Credit with Incomplete Information.} Suppose there are two types of students, Eagle and Dove. The student is an Eagle with probability \(q\).
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{doveeagle}
+        }
+    \end{figure}
+    \item In fact, such game can be transformed into a game with imperfect information by something called \textbf{Harsanyi transformation}.
+    \item We introduce an additional player called \textbf{Nature}.
+    \begin{itemize}
+        \item Nature plays a fixed mixed strategy that determines players' types, and this move is only observed by that player.
+        \item Nature is non-strategic: It doesn't optimize, but belief still needs to be consistent.
+    \end{itemize}
+    %\newpage
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{eagledove}
+        }
+    \end{figure}
+
+    \item Instead of the method in the last section, another way to find PBEs is to analyze different candidate strategy profiles.
+    \item We first classify two types of strategy profiles:
+    \begin{itemize}
+        \item \textbf{Separating}: Different types play different strategies.
+        \item \textbf{Pooling}: Different types play the same strategy.
+    \end{itemize}
+
+    \item In this game, there are four candidates:
+    \begin{enumerate}
+        \item Separating: Eagle goes, Dove does not
+        \begin{itemize}
+            \item For belief to be consistent, the professor must believe whoever comes is an Eagle. Best response is to always comply.
+            \item However, Dove can then choose to go instead to ``pretend" to be an Eagle. As not going is not a best response for Dove, this is not a PBE.
+        \end{itemize}
+        \item Separating: Dove goes, Eagle does not
+        \begin{itemize}
+            \item For belief to be consistent, the professor must believe whoever comes is an Dove. Best response is to never comply.
+            \item Knowing this, Dove should never go. As going is not a best response for Dove, this is not a PBE.
+        \end{itemize}
+        \item Pooling: Both go
+        \begin{itemize}
+            \item For belief to be consistent, the professor must believe in the ``true" probability: the student who comes is Eagle with probability \(q\) and Dove with probability \(1-q\).
+            \item Then, the expected utility is:
+            \[
+            \begin{cases}
+                U_P(C) = 1 \cdot q + 1 \cdot (1-q) = 1  \\
+                U_P(NC) = 0 \cdot q + 2 \cdot (1-q) = 2-2q
+            \end{cases}
+            \]
+            \item If \(q \le 0.5\), not complying is a best response. However, if the professor does not comply, going is not a best response for both. This is not a PBE.
+            \item If \(q \ge 0.5\), complying is a best response. Going is then also a best response for both types. This is a PBE.
+        \end{itemize}
+        \item Pooling: Both don't go
+        \begin{itemize}
+            \item Since the information set \(\{(Eagle, G),(Dove,G)\}\) is not reached, the professor is free to have any belief. Let \(p\) be the belief that the student is Eagle.
+            \item If \(p \ge 0.5\), complying is a best response. However, if the professor always complies, not going is not a best response for both. This is not a PBE.
+            \item If \(p \le 0.5\), not complying is a best response. Not going is then also a best response for both types. This is a PBE.
+        \end{itemize}
+    \end{enumerate}
+
+    \item \textbf{Example 5.3. Akerlof's Lemon Market (Screening Game).} A seller is selling a used car with value \(v \in [0,1]\). The car is worth \(v\) to a buyer, but only \(\alpha v\) to the seller, where \(\alpha \in [0,1]\). The buyer first proposes a price \(p\) to the seller, and the seller decides to accept or reject the deal. If the deal is accepted, the seller gets \(p-\alpha v\) and the buyer gets \(v-p\); otherwise, both walk away with 0.
+
+    \begin{itemize}
+        \item In a basic demand-and-supply model with complete information, the trade will take place at any \(p \in [\alpha v, v]\), since both can be better off.
+        \item However, with incomplete information, the buyer doesn't know \(v\), but only the probability distribution: \(v \sim \text{Uniform}(0,1)\).
+        \item Will there be a deal?
+        \item Suppose the buyer proposes any arbitrary \(p \in [0,1]\).
+        \item Note that the seller will accept if \(p-\alpha v > 0\), and reject if \(p-\alpha v < 0\).
+        \item Clearly, the only possible sellers who will accept are those with \(v \in [0,\frac{p}{\alpha}]\).
+        \item Going back to the buyer, did they make a reasonable offer?
+        \item We calculate the expected utility of proposing \(p\):
+        \[
+        U_B(p) = \mathbb{P}(v \in [0,\frac{p}{\alpha}]) \cdot \mathbb{E}(v-p \mid v \in [0,\frac{p}{\alpha}]) = \frac{p}{\alpha} \cdot (\frac{p}{2\alpha} - p) = \frac{p^2}{2\alpha^2} \cdot (1-2\alpha)
+        \]
+        \item If \(\alpha \ge 0.5\), proposing any \(p>0\) will in fact produce negative payoff!
+        \item \textbf{Winner's curse}: The seller accepting the deal implies that the car actually isn't worth as much.
+        \item In this case, the buyer wants the seller to reject the offer all the time. The PBE is offering \(p=0\) and getting rejected.
+        \item If \(\alpha \le 0.5\), the optimal offer is simply a boundary solution: \(p = \alpha\), where every type of seller will accept the offer.
+    \end{itemize}
+
+    \item \textbf{Example 5.4. Job Market Signaling.} A player, Alice, is born Smart or Average. She first decides to go to college or not. Then, a firm decides to offer Alice a High or a Low job. The firm only sees whether Alice has gone to college, but not whether she is Smart.
+
+    Alice's payoff is coming from the value of the job minus the cost of going to college, where the only difference is that going to college is more (mentally) costly for Average Alice.
+
+    \begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{lll}
+    & High job: $+10$ & Low job: $+5$ \\
+    Going to college:     & Smart: $-2$ & Average: $-10$ \\
+    Not going to college: & Smart: $-0$ & Average: $-0$  \\
+    \end{tabular}
+    \end{center}
+
+    The firm wants to match the right person to the right job.
+
+    \begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{lll}
+    Smart \& High: $+10$ & Average \& Low: $+5$ & Otherwise: $0$ \\
+    \end{tabular}
+    \end{center}
+
+    \newpage
+    Using a game tree to represent:
+    \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{signaling}
+        }
+    \end{figure}
+    \begin{itemize}
+        \item To Alice, going to college is strictly worse off. To the firm, what actually matters is the type of Alice but not her degree. Would Alice go to college at all?
+        \item Notice that Average Alice must not attend college in any PBE, as the best she can get from going to college (College \& High job) is still not as good as the worst she can get from not going (No College \& Low job).
+        \item So, we only need to consider Smart Alice.
+    \end{itemize}
+    \begin{enumerate}
+        \item Separating: Smart Alice goes to college, Average Alice does not
+        \begin{itemize}
+            \item For belief to be consistent, the firm must believe whoever went to college is Smart, and whoever did not is Average.
+            \item Best response: Offer High job to who went to college, and Low job to who didn't.
+            \item This is a PBE.
+        \end{itemize}
+        \item Pooling: Both don't go to college
+        \begin{itemize}
+            \item Because there are two information sets with more than one histories, \(\{(Smart, College), \)
+            
+            \((Average, College)\}\) and \(\{(Smart, No College), (Average, No College)\}\), the firm should have two sets of beliefs.
+            \item For belief to be consistent, the firm must believe in the ``true" probability if they see an Alice with no college degree: Alice is Smart with probability \(q\) and Average with probability \(1-q\).
+            \item On the other hand, they can have any \textbf{off-equilibrium belief} for the ``college" path and then take any hypothetical best response.
+            \item When Alice does not go to college, the expected utility for the firm is:
+            \[
+            \begin{cases}
+                U_F(H) &= 10q + 0(1-q) = 10q \\
+                U_F(L) &= 0q + 5(1-q) = 5-5q
+            \end{cases}
+            \]
+            Thus, the firm will offer High job if \(q \ge \frac{1}{3}\), and Low job if \(q \le \frac{1}{3}\).
+        \end{itemize}
+        \begin{enumerate}
+            \item If \(q \ge \frac{1}{3}\) and the firm offers High job: Both types of Alice get the absolutely highest payoff (+10). This is a PBE.
+            \item If \(q \le \frac{1}{3}\) and the firm offers Low job: 
+        \end{enumerate}
+        \begin{itemize}
+            \item Can Smart Alice deviate to attend college?
+            \item It depends on the firm's belief for a college-attending Alice. Let \(p = \mu(Smart, College) = \mathbb{P}(Smart \mid College)\).
+            \item Note that because going to college has no value added at all, the firm's expected utility is almost identical:
+            \[
+            \begin{cases}
+                U_F(H) &= 10p + 0(1-p) = 10p \\
+                U_F(L) &= 0p + 5(1-p) = 5-5p
+            \end{cases}
+            \]
+            \item The firm then hypothetically offers High job if \(p \ge \frac{1}{3}\), and Low job if \(p \le \frac{1}{3}\).
+            \item Thus, if \(p \ge \frac{1}{3}\) and the firm will offer High job in this case, Smart Alice has incentive to go to college, which is not a PBE.
+            \item A pooling PBE: \(q \le \frac{1}{3}\), \(p \le \frac{1}{3}\), Alice doesn't go to college all the time, the firm offers Low job all the time.
+        \end{itemize}
+    \end{enumerate}
+
+    \begin{itemize}
+        \item While we have confirmed that a polling PBE exists, does this make sense?
+        \item We know that Average Alice must not go to college. However, the pooling equilibrium requires that \(p \le \frac{1}{3}\), that is, an Alice who went to college is unlikely to be Smart!
+        \item Thus, we want to kick out some equilibria that are unreasonable, i.e. \textbf{equilibrium refinement}.
+        \item \textbf{Intuitive criterion}: If an unexpected deviation occurs (e.g. Alice going to college in pooling equilibrium), the receiver (e.g. the firm) must assign zero probability to any sender type that could never benefit from that deviation under any plausible response (e.g. Average Alice).
+        \item In this case, we must assign \(p=1\), which eliminates this polling equilibrium.
+    \end{itemize}
+    \item A takeaway: If a signaling mechanism (e.g. exam, job interview) is too weak to differentiate between strong and weak candidates (i.e. it is not too costly for weak candidates), it is possible that it fails to reach a separating equilibrium.
+
+    \item \textbf{Example 5.4. Bayesian Persuasion.} The Governor calls the President and claims that there's an epidemic in his province, asking for a relief fund.
+
+    The President decides whether to approve (\(Y\)) or reject (\(N\)) the request. He doesn't know if there is actually an epidemic, but a probability \(q<0.5\) of an epidemic. In contrast, the Governor knows the truth (state): whether there is an epidemic (\(y\)) or not (\(n\)).
+
+    The Governor only wants the fund regardless of the truth: \(u_G(Y) = 1\) and \(u_G(N) = 0\). The President wants it to match: \(u_P(y,Y) = u_P(n,N) = 1\) and \(u_P(y,N) = u_P(n,Y) = 0\).
+
+    \begin{itemize}
+        \item If the state is more likely to be \(n\) (\(q<0.5\)), it is easy to verify that the President's best response is to always reject (\(N\)) given a consistent belief.
+        \item The Governor always receives 0 and he cannot change the President's mind: a \textbf{cheap talk}.
+        \item Potential solution: Invite a neutral inspector (e.g. WHO) to inspect, who always reports the truth to the president.
+        \item Denote the reported state by \(\hat{y}\) or \(\hat{n}\). Since WHO always reports the truth, the President's best response is \(Y\) if \(\hat{y}\), and \(N\) if \(\hat{n}\).
+        \item Then,
+        \[
+        U_G = q \cdot 1 + (1+q) \cdot 0 = q
+        \]
+        \item What if the Governor can hire an inspector who is not perfect or is not so honest?
+        \item Suppose the Governor hires an inspector with ability \((\alpha, \beta)\), where \(\alpha\) is the probability of \(\hat{y}\) if there is an epidemic, and \(\beta\) is the probability of \(\hat{y}\) if there is not, and furthermore assume \(\alpha \ge \beta\).
+
+        \newpage
+        \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{inspector}
+        }
+        \caption*{\textit{Note that after Nature, the move of \textcolor{red}{Governor} choosing \((\alpha, \beta)\) is omitted.}}
+        \end{figure}
+
+
+    \item What is the President's expected utility?
+    \item If the inspector reports \(\hat{y}\):
+    \[
+        U_P(Y \mid \hat{y}) = \mathbb{P}(y \mid \hat{y}) = \frac{\mathbb{P}(\hat{y} \mid y)\mathbb{P}(y)}{\mathbb{P}(\hat{y})} = \frac{\alpha q}{\alpha q + \beta(1-q)}
+    \]
+    The president will approve if \(\frac{\alpha q}{\alpha q + \beta(1-q)} \ge 0.5 \implies \frac{\alpha}{\beta} \ge \frac{1-q}{q}\).
+    
+    \item If the inspector reports \(\hat{n}\):
+    \[
+        U_P(Y \mid \hat{n}) = \mathbb{P}(y \mid \hat{n}) = \frac{\mathbb{P}(\hat{n} \mid y)\mathbb{P}(y)}{\mathbb{P}(\hat{n})} = \frac{(1-\alpha) q}{(1-\alpha) q + (1-\beta) (1-q)}
+    \]
+    The president will approve if \(\frac{(1-\alpha) q}{(1-\alpha) q + (1-\beta) (1-q)} \ge 0.5 \implies \frac{1-\alpha}{1-\beta} \ge \frac{1-q}{q}\).
+
+    \item Is it possible for the Governor to choose an inspector such that the President always accepts?
+    \item No: If \(q < 0.5\), then \(\frac{1-q}{q} > 1\); and if \(\alpha \ge \beta\), then \(\frac{1-\alpha}{1-\beta} \le 1\). Hence, the President always rejects when \(\hat{n}\).
+
+    \item However, the Governor can at least make the President always accept when \(\hat{y}\), e.g. WHO: \((\alpha,\beta)=(1,0)\).
+
+    \item The Governor maximize expected utility by maximizing the probability of \(\hat{y}\) while making sure the President still accepts:
+    \[
+    \max_{\alpha,\beta} \mathbb{P}(\hat{y}) = \mathbb{P}(\hat{y} \mid y) \mathbb{P}(y) + \mathbb{P}(\hat{y} \mid n)\mathbb{P}(n) = \alpha q + \beta (1-q)
+    \]
+    \[
+    \text{s.t. } \frac{\alpha}{\beta} \ge \frac{1-q}{q}
+    \]
+    \item Note that \(\alpha q + \beta (1-q)\) is strictly increasing in both \(\alpha\) and \(\beta\).
+    \item Clearly \(\alpha^* = 1\). Putting into the constraint, we have \(\beta^* = \frac{q}{1-q}\).
+    \item The Governor's expected utility is then:
+    \[
+    U_G = q \cdot 1 + (1-q) \cdot \frac{q}{1-q} = 2q
+    \]
+    which is better than WHO.
+    \end{itemize}
+\end{itemize}
+
+\end{document}
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{llcc}
+&&
+\multicolumn{2}{c}{Inspector}  \\&& 
+\(\hat{y}\) & \(\hat{n}\)
+\\ \cline{3-4} 
+\multirow{2}{*}{Nature} & 
+\multicolumn{1}{c|}{\(y\)} & 
+\multicolumn{1}{c|}{\(\alpha\)} &
+\multicolumn{1}{c|}{\(1-\alpha\)} 
+\\ \cline{3-4} & 
+\multicolumn{1}{c|}{\(n\)} & 
+\multicolumn{1}{c|}{\(\beta\)} &
+\multicolumn{1}{c|}{\(1-\beta\)} 
+\\ \cline{3-4} 
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+
+        \begin{table}[h]
+        \begin{center}
+        \begin{tabular}{lll}
+        & Positive & Negative   \\
+        True  & $\alpha$ & $1-\beta$  \\
+        False & $\beta$  & $1-\alpha$
+        \end{tabular}
+        \end{center}
+        \end{table}
