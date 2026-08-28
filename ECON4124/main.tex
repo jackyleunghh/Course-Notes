@@ -141,7 +141,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         For De Gea:
         \[
         \begin{cases}
-            (No\;Goal) \; u_D(\leftarrow_M, \leftarrow_D) = u_D(\rightarrow_M, \rightarrow_M) = 1 \\
+            (No\;Goal) \; u_D(\leftarrow_M, \leftarrow_D) = u_D(\rightarrow_M, \rightarrow_D) = 1 \\
             (Goal ) \; u_D(\leftarrow_M, \rightarrow_D) = u_D(\rightarrow_M, \leftarrow_D) = -1
         \end{cases}
         \]
@@ -337,9 +337,9 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     a^*_i \in B_i(\mathbf{a}^*_{-i})
     \]
     \begin{itemize}
-        \item \textit{Proof.} If: Suppose \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\), then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-1}^*)\) for all \(a_i \in A_i\), so by definition \(\mathbf{a}^*\) is a Nash equilibrium.
+        \item \textit{Proof.} If: Suppose \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\), then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-i}^*)\) for all \(a_i \in A_i\), so by definition \(\mathbf{a}^*\) is a Nash equilibrium.
 
-        Only if: Suppose \(\mathbf{a}^*\) is a Nash equilibrium, then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-1}^*)\) for all \(a_i \in A_i\), so by definition \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\).
+        Only if: Suppose \(\mathbf{a}^*\) is a Nash equilibrium, then \(u_i(a_i^*,\mathbf{a}_{-i}^*) \ge u_i(a_i,\mathbf{a}_{-i}^*)\) for all \(a_i \in A_i\), so by definition \(a^*_i \in B_i(\mathbf{a}^*_{-i})\) for every player \(i\).
     \end{itemize}
     \item For a two-player game, an action profile \((a_1^*, a_2^*)\) is a Nash equilibrium if and only if:
     \[
@@ -352,7 +352,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \item With this being formalized, we can deal with some more complicated games, like games with continuous, and therefore infinite choices.
     \item \textbf{Example 2.5. Cournot Duopoly.} Two homogeneous firms producing the same goods are deciding the amount of goods to produce: \(q_i \in \mathbb{R}^+\). The goods have the following standard downward-sloping market demand function:
     \[
-    \mathbb{P}(Q) = \max(a-Q,0)
+    P(Q) = \max(a-Q,0)
     \]
     where \(a\) is a positive constant and \(Q = q_1 + q_2\).
 
@@ -397,7 +397,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     }
     \end{figure}
 
-    \item \textbf{Example 2.5. Hotelling Model.} On a 1-km beach, represented by the interval $[0, 1]$ on the number line, two hot dog sellers are deciding where to place their carts: \(a_i \in [0,1]\). Customers are uniformly distributed along this interval, and each customer goes to whichever cart is closer to them. In other words, each seller aims to capture as much territory as possible, securing all customers closest to their cart while losing the remaining customers to their competitor.
+    \item \textbf{Example 2.6. Hotelling Model.} On a 1-km beach, represented by the interval $[0, 1]$ on the number line, two hot dog sellers are deciding where to place their carts: \(a_i \in [0,1]\). Customers are uniformly distributed along this interval, and each customer goes to whichever cart is closer to them. In other words, each seller aims to capture as much territory as possible, securing all customers closest to their cart while losing the remaining customers to their competitor.
     
     \begin{figure}[h]
     \centering
@@ -408,7 +408,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
 
     Their utility is simply the length of the interval they occupy:
     \[
-    u(a_i, a_{-1}) = 
+    u(a_i, a_{-i}) = 
     \begin{cases}
         \frac{a_i + a_{-i}}{2} &\text{if } a_i < a_{-i} \\
         \frac{1}{2} &\text{if } a_i = a_{-i} \\
@@ -539,7 +539,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \begin{itemize}
         \item We can make use of Theorem 2.5. For every player \(i\), check if every \(a_i\) where \(\sigma^*_i(a_i)>0\) is a best action against \(\boldsymbol{\sigma}^*_{-i}\).
     \end{itemize}
-    \item \textbf{Example 2.6. Penalty Shootout with Mixed Strategy.} By the tick method, we can find that the game has no pure strategy Nash equilibrium. How about mixed strategy?
+    \item \textbf{Example 2.7. Penalty Shootout with Mixed Strategy.} By the tick method, we can find that the game has no pure strategy Nash equilibrium. How about mixed strategy?
     \begin{itemize}
         \item Start from the point of view of Messi. Assume De Gea plays a mixed strategy, where \(\sigma_D(\leftarrow_D) = q\) and \(\sigma_D(\rightarrow_D) = 1-q\). Instead of \(\sigma_D\), we can simply use \(q\) to denote the mixed strategy.
         \item Then, we calculate Messi's expected utility from each action:
@@ -586,7 +586,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     }
     \end{figure}
 
-    \item \textbf{Example 2.7. Volunteer's Dilemma.} \(k\) students are in the classroom, where the professor has just said something confusing. Each of the student decides to raise their hand and ask for clarification or not, but doing so is costly:
+    \item \textbf{Example 2.8. Volunteer's Dilemma.} \(k\) students are in the classroom, where the professor has just said something confusing. Each of the student decides to raise their hand and ask for clarification or not, but doing so is costly:
     \[
     u_i =
     \begin{cases}
@@ -697,7 +697,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
 \end{table}
 
     \item In some games, including \textit{Prisoner's Dilemma}, the pure strategy Nash equilibrium can be found by \textbf{iterated elimination of strictly dominated strategies (IESDS)} alone. The result is a \textbf{dominant equilibrium}.
-    \item \textbf{Example 2.8. Guess \(\frac{2}{3}\) of the Average.} A group of \(n\) players are guessing a real number \(a_i \in [0,100]\). Their goal is to guess as close as the \(\frac{2}{3}\) of the average guess as possible, so:
+    \item \textbf{Example 2.9. Guess \(\frac{2}{3}\) of the Average.} A group of \(n\) players are guessing a real number \(a_i \in [0,100]\). Their goal is to guess as close as the \(\frac{2}{3}\) of the average guess as possible, so:
     \[
     u_i = -\left|a_i - \frac{2}{3}\cdot\frac{\sum^n_{j=1} a_j}{n}\right|
     \]
@@ -1484,7 +1484,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \end{itemize}
     \item A takeaway: If a signaling mechanism (e.g. exam, job interview) is too weak to differentiate between strong and weak candidates (i.e. it is not too costly for weak candidates), it is possible that it fails to reach a separating equilibrium.
 
-    \item \textbf{Example 5.4. Bayesian Persuasion.} The Governor calls the President and claims that there's an epidemic in his province, asking for a relief fund.
+    \item \textbf{Example 5.5. Bayesian Persuasion.} The Governor calls the President and claims that there's an epidemic in his province, asking for a relief fund.
 
     The President decides whether to approve (\(Y\)) or reject (\(N\)) the request. He doesn't know if there is actually an epidemic, but a probability \(q<0.5\) of an epidemic. In contrast, the Governor knows the truth (state): whether there is an epidemic (\(y\)) or not (\(n\)).
 
@@ -1497,7 +1497,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         \item Denote the reported state by \(\hat{y}\) or \(\hat{n}\). Since WHO always reports the truth, the President's best response is \(Y\) if \(\hat{y}\), and \(N\) if \(\hat{n}\).
         \item Then,
         \[
-        U_G = q \cdot 1 + (1+q) \cdot 0 = q
+        U_G = q \cdot 1 + (1-q) \cdot 0 = q
         \]
         \item What if the Governor can hire an inspector who is not perfect or is not so honest?
         \item Suppose the Governor hires an inspector with ability \((\alpha, \beta)\), where \(\alpha\) is the probability of \(\hat{y}\) if there is an epidemic, and \(\beta\) is the probability of \(\hat{y}\) if there is not, and furthermore assume \(\alpha \ge \beta\).
