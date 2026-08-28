@@ -1445,7 +1445,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
             
             \((Average, College)\}\) and \(\{(Smart, No College), (Average, No College)\}\), the firm should have two sets of beliefs.
             \item For belief to be consistent, the firm must believe in the ``true" probability if they see an Alice with no college degree: Alice is Smart with probability \(q\) and Average with probability \(1-q\).
-            \item On the other hand, they can have any \textbf{off-equilibrium belief} for the ``college" path and then take any hypothetical best response.
+            \item On the other hand, they can have any \textbf{off-equilibrium belief}, say \(p\) for Smart and \(1-p\) for Average, along the ``college" path and then take any hypothetical best response.
             \item When Alice does not go to college, the expected utility for the firm is:
             \[
             \begin{cases}
@@ -1461,7 +1461,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         \end{enumerate}
         \begin{itemize}
             \item Can Smart Alice deviate to attend college?
-            \item It depends on the firm's belief for a college-attending Alice. Let \(p = \mu(Smart, College) = \mathbb{P}(Smart \mid College)\).
+            \item It depends on the firm's belief for a college-attending Alice.
             \item Note that because going to college has no value added at all, the firm's expected utility is almost identical:
             \[
             \begin{cases}
@@ -1477,7 +1477,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
 
     \begin{itemize}
         \item While we have confirmed that a polling PBE exists, does this make sense?
-        \item We know that Average Alice must not go to college. However, the pooling equilibrium requires that \(p \le \frac{1}{3}\), that is, an Alice who went to college is unlikely to be Smart!
+        \item We know that Average Alice must not go to college in any PBE. However, the pooling equilibrium requires that \(p \le \frac{1}{3}\), that is, the firm thinks that an Alice who went to college is unlikely to be Smart!
         \item Thus, we want to kick out some equilibria that are unreasonable, i.e. \textbf{equilibrium refinement}.
         \item \textbf{Intuitive criterion}: If an unexpected deviation occurs (e.g. Alice going to college in pooling equilibrium), the receiver (e.g. the firm) must assign zero probability to any sender type that could never benefit from that deviation under any plausible response (e.g. Average Alice).
         \item In this case, we must assign \(p=1\), which eliminates this polling equilibrium.
@@ -1488,10 +1488,15 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
 
     The President decides whether to approve (\(Y\)) or reject (\(N\)) the request. He doesn't know if there is actually an epidemic, but a probability \(q<0.5\) of an epidemic. In contrast, the Governor knows the truth (state): whether there is an epidemic (\(y\)) or not (\(n\)).
 
-    The Governor only wants the fund regardless of the truth: \(u_G(Y) = 1\) and \(u_G(N) = 0\). The President wants it to match: \(u_P(y,Y) = u_P(n,N) = 1\) and \(u_P(y,N) = u_P(n,Y) = 0\).
+    The Governor only wants the fund regardless of the truth: 
+    \[u_G(Y) = 1 \text{ and } u_G(N) = 0\]
+    The President wants it to match: 
+    \[u_P(y,Y) = u_P(n,N) = 1 \text{ and } u_P(y,N) = u_P(n,Y) = 0\]
+    Given a consistent belief, it follows that the expected utility for both are equivalent to the probabilities: 
+    \[U_G = \mathbb{P}(Y), U_P(Y) = \mathbb{P}(y), U_P(N) = \mathbb{P}(n)\]
 
     \begin{itemize}
-        \item If the state is more likely to be \(n\) (\(q<0.5\)), it is easy to verify that the President's best response is to always reject (\(N\)) given a consistent belief.
+        \item If the state is more likely to be \(n\) (\(\mathbb{P}(y) = q<0.5\)), it is easy to verify that the President's best response is to always reject (\(N\)).
         \item The Governor always receives 0 and he cannot change the President's mind: a \textbf{cheap talk}.
         \item Potential solution: Invite a neutral inspector (e.g. WHO) to inspect, who always reports the truth to the president.
         \item Denote the reported state by \(\hat{y}\) or \(\hat{n}\). Since WHO always reports the truth, the President's best response is \(Y\) if \(\hat{y}\), and \(N\) if \(\hat{n}\).
@@ -1500,7 +1505,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         U_G = q \cdot 1 + (1-q) \cdot 0 = q
         \]
         \item What if the Governor can hire an inspector who is not perfect or is not so honest?
-        \item Suppose the Governor hires an inspector with ability \((\alpha, \beta)\), where \(\alpha\) is the probability of \(\hat{y}\) if there is an epidemic, and \(\beta\) is the probability of \(\hat{y}\) if there is not, and furthermore assume \(\alpha \ge \beta\).
+        \item Suppose the Governor hires an inspector with ability \((\alpha, \beta)\), where \(\alpha\) is the probability of reporting \(\hat{y}\) if there is an epidemic, and \(\beta\) is the probability of reporting \(\hat{y}\) if there is not, and furthermore assume \(\alpha \ge \beta\).
 
         \newpage
         \begin{figure}[h]
@@ -1539,6 +1544,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \]
     \item Note that \(\alpha q + \beta (1-q)\) is strictly increasing in both \(\alpha\) and \(\beta\).
     \item Clearly \(\alpha^* = 1\). Putting into the constraint, we have \(\beta^* = \frac{q}{1-q}\).
+    \item In other words, the Governor intentionally keeps some possibility of having false positive (\(\mathbb{P}(\hat{y}\mid n)\)) while ensuring that the inspector is still truthful enough for the President to believe.
     \item The Governor's expected utility is then:
     \[
     U_G = q \cdot 1 + (1-q) \cdot \frac{q}{1-q} = 2q
