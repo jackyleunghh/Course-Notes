@@ -10,6 +10,7 @@
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{cancel}
+\usepackage{pgfplots}
 
 \usetikzlibrary{shapes.geometric, decorations.markings, arrows.meta}
 \definecolor{gamegreen}{RGB}{58, 107, 34}
@@ -18,6 +19,7 @@
 \definecolor{gameblue}{RGB}{0, 102, 204}
 \definecolor{gamered}{RGB}{204, 51, 34}
 
+\pgfplotsset{compat=1.18} 
 
 \newcommand{\bluestrike}[1]{{\color{blue}\xcancel{\color{black}#1}}}
 \newcommand{\redstrike}[1]{{\color{red}\xcancel{\color{black}#1}}}
@@ -440,7 +442,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \item So far we have been choosing from deterministic items (we get what we choose), what if we include lotteries?
     \item Consider a set of holiday destinations, Vienna, Paris, or stay at Home, where you have \(u(V) = 3, u(P) = 2, u(H) = 1\).
     \item We add a lottery to your choices: 10\% Vienna or 90\% Home \(= 0.1V + 0.9H\).
-    \item Intuitively, we should know \(V \succ 0.9V + 0.1H \succ H\). But \(0.9V + 0.1H \succ \text{or} \prec P\)?
+    \item Intuitively, we should know \(V \succ 0.1V + 0.9H \succ H\). But \(0.1V + 0.9H \succ \text{or} \prec P\)?
     \item To get to the preferences, we first formalize what a lottery is.
     \item A lottery can be defined as a probability function:
     \[
@@ -777,8 +779,8 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \end{itemize}
     \item Not Nash equilibrium:
     \begin{itemize}
-        \item Adam can deviate to \(A_A(\emptyset) = R\) instead of \(H\): \(U_A(R,R) = 1 > 0 = U_A(H,R)\).
-        \item Eve can deviate to \(A_E(H_A) = H\) instead of \(R\): \(U_E(H,H) = 1 > 0 = U_E(H,R)\).
+        \item Adam can deviate to \(A_A(\emptyset) = R\) instead of \(H\): \(U_A(R,\textcolor{red}{R}) = 1 > 0 = U_A(H,\textcolor{red}{R})\).
+        \item Eve can deviate to \(A_E(H) = \textcolor{red}{H}\) instead of \(\textcolor{red}{R}\): \(U_E(H,\textcolor{red}{H}) = 1 > 0 = U_E(H,\textcolor{red}{R})\).
     \end{itemize}
     \item Consider another strategy profile: 
     \begin{figure}[h]
@@ -877,7 +879,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
 
     \begin{enumerate}
         \item Since \(100-x > -1\) for all \(x \in [0,100]\), Player 2 must accept no matter what \(x\) is.
-        \item Knowing this, Player 1 must maximize. The SPE is \(x = 100\): Player 1 keeps all the money.
+        \item Knowing this, Player 1 must maximize. The SPE is \(x = 100\) and Player 2 accepts: Player 1 keeps all the money.
     \end{enumerate}
     
 \end{itemize}
@@ -942,8 +944,14 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \begin{itemize}
         \item Each player \(i\) has a set of \textbf{type}: \(T_i\). For example, \(T_A = \{Normal\}\) and \(T_E = \{Normal, Moody\}\).
         \item \(t_i \in T_i\) is the private information of player \(i\). Other players don't know other players' type, but know the distribution; for example, \(\mathbb{P}(t_E = M) = p\).
-        \item Utility depends both the action profile and the type profile. For example, \(u_E((H,H)|(n,n)) = 1\), \(u_E((H,H)|(n,m)) = 0\).
+        \item Utility depends both the action profile \(\mathbf{a}\) and the type profile \(\mathbf{t}\). For example, \(u_E((H,H)|(n,n)) = 1\), \(u_E((H,H)|(n,m)) = 0\).
         \item A strategy profile specifies a mixed strategy for every type of player. For example, \((\sigma_A, \sigma_E^N, \sigma_E^M)\).
+    \end{itemize}
+
+    \item How do players make decisions?
+    \begin{itemize}
+        \item Because we're dealing with probabilities, players maximizing \textbf{expected utility} will return to the traditional definition of expected values.
+        \item For example, we will frequently use the law of total expectation: \[U(\textbf{a}) = \mathbb{E}(u(\textbf{a})) = \mathbb{E}(\mathbb{E}(u(\textbf{a}) \mid \mathbf{t})) = \sum_j \mathbb{P}(\mathbf{t} = \mathbf{t}_j)\mathbb{E}(u(\textbf{a}\mid \mathbf{t} = \mathbf{t}_j)) \]
     \end{itemize}
 
     \item \textbf{Definition 4.1.} A \textbf{Bayes Nash equilibrium (BNE)} is a strategy profile such that there is no profitable deviation for every type of any player.
@@ -971,7 +979,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         \text{Watching less preferred movie with company} & \text{: 1 if normal, 0 if moody} \\ 
     \end{cases}
     \]
-    \newpage
+    %\newpage
     Furthermore, the joint probability distribution of types is given by:
     \begin{table}[h]
     \centering
@@ -1024,7 +1032,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \end{cases}
     \]
     \begin{itemize}
-        \item \textit{Remark.} For simplicity, suppose there is no ties.
+        \item \textit{Remark.} For simplicity, suppose there is no ties. In fact, most of the time, we will find that ties do not happen at all because we assume a continuous distribution, where \(\mathbb{P}(t_i=x)=0\).
         \item How to determine who wins?
         \item For a static game, we use a \textbf{sealed-bid auction}, where everyone submits a bid \(a_i \in \mathbb{R}^+\) at once and the highest bidder wins.
         \item How much does the winner, bidder \(i\), pay?
@@ -1553,38 +1561,225 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
     \end{itemize}
 \end{itemize}
 
-\end{document}
+\section{Repeated Games and Zero-Sum Games}
 
+\begin{itemize}
+    \item The content in this section is not covered in the course and is provided by the author for self-study.
+\end{itemize}
+
+\subsection{Repeated Games}
+
+\begin{itemize}
+    \item A \textbf{repeated game} is defined by a collection of sequential one-shot games. In other words, players play several identical static games one after one.
+    \item In repeated games, a \textbf{strategy} is no longer just what a player plays in one single game, but in all games.
+    \item We consider only pure strategies. Then, we can have an action profile \(\mathbf{a}_t\) for every round \(t = 0,1,2,\dots\)
+    \item Players can play strategies based on what happened in the previous games. For example, in \textit{Repeated Prisoner's Dilemma}, possible strategies include:
+    \begin{itemize}
+        \item Grim Trigger: Keep cooperating, but if the opponent defects just once, always defect in the remaining rounds.
+        \item Tit-for-Tat: Cooperate in the first round, then copy whatever the opponent did in the last round.
+    \end{itemize}
+    \item How do players maximize utility?
+    \begin{itemize}
+        \item Since games are played over time, players maximize \textbf{present discounted utility}.
+    \end{itemize}
+    \item For a repeated game with \(n\) rounds:
+    \[
+    U_i = \sum_{t=0}^n \delta^t u_i(\mathbf{a}_t)
+    \]
+    where \(\delta \in (0,1)\) is a \textbf{discount factor}.
+    \item This leads to two cases: \textbf{finitely} or \textbf{infinitely} repeated games.
+    \item \textbf{Example 6.1. Finitely Repeated Prisoner's Dilemma.} For convenience, we slightly modify the payoff of the \textit{Prisoner's Dilemma} from Chapter 2:
 
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{llcc}
 &&
-\multicolumn{2}{c}{Inspector}  \\&& 
-\(\hat{y}\) & \(\hat{n}\)
+\multicolumn{2}{c}{Joker}  \\&& 
+{Cooperate} & 
+{Defect} 
 \\ \cline{3-4} 
-\multirow{2}{*}{Nature} & 
-\multicolumn{1}{c|}{\(y\)} & 
-\multicolumn{1}{c|}{\(\alpha\)} &
-\multicolumn{1}{c|}{\(1-\alpha\)} 
+\multirow{2}{*}{Bane} & 
+\multicolumn{1}{c|}{Cooperate} & 
+\multicolumn{1}{c|}{(1, 1)} &
+\multicolumn{1}{c|}{(-1, 2)} 
 \\ \cline{3-4} & 
-\multicolumn{1}{c|}{\(n\)} & 
-\multicolumn{1}{c|}{\(\beta\)} &
-\multicolumn{1}{c|}{\(1-\beta\)} 
+\multicolumn{1}{c|}{Defect} & 
+\multicolumn{1}{c|}{(2, -1)} &
+\multicolumn{1}{c|}{(0, 0)} 
 \\ \cline{3-4} 
 \end{tabular}
 \end{center}
 \end{table}
 
+    \begin{itemize}
+        \item Because there is an end to the game, to find an SPE, we can simply use backward induction.
+        \item What is the best response in the last round?
+        \item Because the payoff in the previous rounds are already locked in, say \(\overline{U}_{i, t-1}\), players only look at what is the best in this round.
+        \item The payoff matrix for the present discounted utility then becomes:
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{llcc}
+&&
+\multicolumn{2}{c}{Joker}  \\&& 
+{Cooperate} & 
+{Defect} 
+\\ \cline{3-4} 
+\multirow{2}{*}{Bane} & 
+\multicolumn{1}{c|}{Cooperate} & 
+\multicolumn{1}{c|}{(\(\overline{U}_{B, t-1} + \delta^t\), \(\overline{U}_{J, t-1} + \delta^t\))} &
+\multicolumn{1}{c|}{(\(\overline{U}_{B, t-1} - \delta^t\), \(\overline{U}_{J, t-1} + 2\delta^t\))} 
+\\ \cline{3-4} & 
+\multicolumn{1}{c|}{Defect} & 
+\multicolumn{1}{c|}{(\(\overline{U}_{B, t-1} + 2\delta^t\), \(\overline{U}_{J, t-1} - \delta^t\))} &
+\multicolumn{1}{c|}{(\(\overline{U}_{B, t-1}\), \(\overline{U}_{J, t-1}\))} 
+\\ \cline{3-4} 
+\end{tabular}
+\end{center}
+\end{table}
+    \item Clearly defect is still strictly better for both. Thus, they must defect in the last round.
+    \item Then, in the second last round, because the payoff in the previous rounds are locked in, plus they know for certain what will happen in the next round as well, they only look at this round.
+    \item They must defect in the second last round, and by the same logic, they must defect in every round, which is a unique SPE.
+    \end{itemize}
 
+    \item \textbf{Example 6.2. Infinitely Repeated Prisoner's Dilemma.} Surprisingly, there are actually multiple equilibria. We show three symmetrical equilibria, where a strategy is best responding if the opponent plays the same strategy.
 
+\begin{enumerate}
+    \item Always defect:
+    \begin{itemize}
+        \item If the opponent defects in every single round, defecting is a strictly dominant action in every round. Always defecting is the only best response, which leads to an SPE.
+    \end{itemize}
+    \item Grim Trigger:
+    \begin{itemize}
+        \item If both players play a grim trigger, the outcome is a forever cooperation. We want to see if any player can deviate to defect in any round \(k\).
+        \item There are two possible cases:
+    \end{itemize}
+    \begin{enumerate}
+        \item Cooperate forever.
+        \item Defect in round \(k\). Knowing the opponent will always defect in the future, the best response is to continue defecting in the remaining rounds.
+    \end{enumerate}
+    \begin{itemize}
+        \item Without loss of generality, we can set \(k = 0\) because both strategies share identical payoffs up to round \(k-1\), meaning the net gain from deviating at round \(k\) is simply scaled by \(\delta^k > 0\) and yields the exact same condition as deviating in round 0.
+        \item We calculate the present discounted utility:
+        \[
+        \begin{cases}
+            U_i(C) = \sum_{t=0}^\infty \delta^t = \frac{1}{1-\delta} \\
+            U_i(D_0) = 2
+        \end{cases}
+        \]
+        \item Solving, we can find \(U_i(C) \ge U_i(D_k)\) if and only if \(\delta \ge \frac{1}{2}\). 
+        \item \textbf{One-shot deviation principle}: A strategy profile is an SPE if and only if no player has profitable deviation in any round of game.
+        \item Thus, both players playing grim trigger is an SPE if and only if \(\delta \ge \frac{1}{2}\).
+    \end{itemize}
+    \item Tit-for-tat:
+    \begin{itemize}
+        \item As opposed to the above, tit-for-tat is actually harder to produce an SPE. Instead, we only show that there is an NE.
+        \item Same as grim trigger, the baseline scenario is forever cooperation, where:
+        \[
+        U_i(C) = \sum_{t=0}^\infty \delta^t = \frac{1}{1-\delta}
+        \]
+        \item Then, we look at three possible deviation strategies. Again, without loss of generality, assume the deviation happens in round 0.
+    \end{itemize}
+    \begin{enumerate}
+        \item Defect once, then return to cooperation:
+        \begin{itemize}
+            \item The payoff is:
+            \[
+            U_i(Dev_1) = 2 - \delta + \sum_{t=2}^\infty \delta^t = 2 - \delta + \frac{\delta^2}{1-\delta}
+            \]
+            \item Solving, we have \(U_i(C) > U_i(Dev_1)\) if and only if \(\delta \ge \frac{1}{2}\).
+        \end{itemize}
+        \newpage
+        \item Always defect:
+        \begin{itemize}
+            \item The payoff is:
+            \[
+            U_i(Dev_2) = 2
+            \]
+            \item Solving, we have \(U_i(C) > U_i(Dev_1)\) if and only if \(\delta \ge \frac{1}{2}\).
+        \end{itemize}
+        \item Alternate defect and cooperate repeatedly (\(D,C,D,C,\dots\):
+        \begin{itemize}
+            \item The player always gets 2 in odd rounds and -1 in even rounds. The payoff starting is:
+            \[
+            U_i(Dev_3) = \sum_{t=0}^\infty 2\delta^{2t} - \sum_{t=0}^\infty \delta^{2t+1} = \frac{2-\delta}{1-\delta^2}
+            \]
+            \item Solving, we have \(U_i(C) > U_i(Dev_1)\) if and only if \(\delta \ge \frac{1}{2}\).
+        \end{itemize}
+    \end{enumerate}
+    \begin{itemize}
+        \item Note that all possible deviation strategies consist of sequences of these three. Since the baseline strategy of tit-for-tat is always a weakly dominant strategy, both players playing tit-for-tat is a Nash equilibrium.
+    \end{itemize}
+\end{enumerate}
+\item \textbf{Theorem 6.1. (Folk Theorems)} In an infinitely repeated game, any outcome where every player earns strictly more than their worst-case payoff can be sustained as an SPE, provided the players care enough about future payoffs (\(\delta\) is sufficiently close to 1).
+\end{itemize}
 
-        \begin{table}[h]
-        \begin{center}
-        \begin{tabular}{lll}
-        & Positive & Negative   \\
-        True  & $\alpha$ & $1-\beta$  \\
-        False & $\beta$  & $1-\alpha$
-        \end{tabular}
-        \end{center}
-        \end{table}
+\subsection{Zero-sum Games}
+
+\begin{itemize}
+    \item A two-player game is a \textbf{zero-sum game} if \(u_1(a_1, a_2) = -u_2(a_1, a_2)\) for all \(a_1 \in A_1\) and \(a_2 \in A_2\).
+    \item We are interested in this kind of games because they have some nice mathematical properties.
+    \item \textbf{Theorem 6.2.} If \(u_1(a_1, a_2) = -u_2(a_1, a_2)\) for all \(a_1 \in A_1\) and \(a_2 \in A_2\), then \(U_1(\sigma_1, \sigma_2) = -U_2(\sigma_1, \sigma_2)\) for all \(\sigma_1 \in \Delta(A_1)\) and \(\sigma_2 \in \Delta(A_2)\).
+    \begin{itemize}
+        \item \textit{Proof.}
+        \begin{align*}
+        U_1(\sigma_1, \sigma_2) &= \sum_{a_1 \in A_1} \sum_{a_2 \in A_2} \sigma_1(a_1) \sigma_2(a_2) u_1(a_1, a_2) \\
+        &= \sum_{a_1 \in A_1} \sum_{a_2 \in A_2} \sigma_1(a_1) \sigma_2(a_2) (-u_2(a_1, a_2)) \\
+        &= -\sum_{a_1 \in A_1} \sum_{a_2 \in A_2} \sigma_1(a_1) \sigma_2(a_2) u_2(a_1, a_2) \\
+        &= -U_2(\sigma_1, \sigma_2)
+        \end{align*}
+
+    \end{itemize}
+    \item \textbf{Theorem 6.3. (Mininax Theorem)} If \(u_1(a_1, a_2) = -u_2(a_1, a_2)\) for all \(a_1 \in A_1\) and \(a_2 \in A_2\), then:
+    \[
+    \max_{\sigma_1 \in \Delta(A_1)} \min_{\sigma_2 \in \Delta(A_2)} U_1(\sigma_1, \sigma_2) = \min_{\sigma_2 \in \Delta(A_2)} \max_{\sigma_1 \in \Delta(A_1)}  U_1(\sigma_1, \sigma_2)
+    \]
+    \begin{itemize}
+        \item \textit{Proof.} Exercise. Hint: By Nash's Existence Theorem, there exists a Nash equilibrium \((\sigma^*_1,\sigma^*_2)\), where by definition \(U_1(\sigma^*_1,\sigma^*_2) \ge U_1(\sigma_1,\sigma^*_2)\) for all \(\sigma_1 \in \Delta(A_1)\), and \(U_2(\sigma^*_1,\sigma^*_2) \ge U_2(\sigma_1^*,\sigma_2)\) for all \(\sigma_2 \in \Delta(A_2)\).
+    \end{itemize}
+    \item In plain language: The maximum utility a player can guarantee equals the minimum utility their opponent can force upon them.
+    \item Therefore, a best response must minimize the maximum possible loss against the opponent.
+    \item In practice, we can denote \(v = U_1(\sigma_1, \sigma_2)\) to represent the payoff of both players, which can be put on a payoff matrix.
+
+    \newpage
+    \item \textbf{Example 6.3. A Numerical Example.}
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+      & $B_1$ & $B_2$ \\ \hline
+$A_1$ & 4     & 0     \\ \hline
+$A_2$ & 3     & 1     \\ \hline
+$A_3$ & 1     & 2     \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+    \begin{itemize}
+    \item Suppose Player B chooses a mixed strategy with \(p = \sigma_B(B_1)\) and \(1-p = \sigma_B(B_2)\). We calculate the expected utility for Player A for every possible pure strategy:
+    \[
+    \begin{cases}
+        U_A(A_1,p) = 4p + 0 \cdot (1-p) = 4p \\
+        U_A(A_2,p) = 3p + 1 \cdot (1-p) = 2p + 1 \\
+        U_A(A_3,p) = p + 2 \cdot (1-p) = 2 - p
+    \end{cases}
+    \]
+    Graphically, we have:
+        \begin{figure}[h]
+        \centering
+        \resizebox{0.4\textwidth}{!}{
+        \input{minimax}
+        }
+        \end{figure}
+
+        \item The bold red line represents the best response for Player A for any mixed strategy \(p\) Player B plays.
+        \item Then, for Player B, the best response is at the \textbf{minimax point} \(p^*=\frac{1}{3}\), which minimizes the maximum expected utility for Player A.
+        \item From the graph, we know that Player A's best response is a mixed strategy between \(A_2\) and \(A_3\). Let \(q = \sigma_A(A_2)\) and \(1-q = \sigma_A(A_3)\).
+        \item In a mixed strategy, Player B must be indifferent between \(B_1\) and \(B_2\). Since \(U_B = -U_A\):
+        \[
+        U_B(q,B_1) = -3q - 1\cdot(1-q) = q - 2\cdot(1-q) = U_B(q,B_2)
+        \]
+        Solving, we have \(q^* = \frac{1}{5}\).
+    \end{itemize}
+\end{itemize}
+
+\end{document}
