@@ -1490,7 +1490,11 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         \item \textbf{Intuitive criterion}: If an unexpected deviation occurs (e.g. Alice going to college in pooling equilibrium), the receiver (e.g. the firm) must assign zero probability to any sender type that could never benefit from that deviation under any plausible response (e.g. Average Alice).
         \item In this case, we must assign \(p=1\), which eliminates this polling equilibrium.
     \end{itemize}
-    \item A takeaway: If a signaling mechanism (e.g. exam, job interview) is too weak to differentiate between strong and weak candidates (i.e. it is not too costly for weak candidates), it is possible that it fails to reach a separating equilibrium.
+    \item Some takeaways:
+    \begin{enumerate}
+        \item If a signaling mechanism (e.g. exam, job interview) is too weak to differentiate between strong and weak candidates (i.e. it is not too costly for weak candidates), it is possible that it fails to reach a separating equilibrium.
+        \item If a separating equilibrium is available, Alice is willing to make herself slightly worse off for the sake of signaling. This is known in evolutionary biology as the \textbf{handicap principle}.
+    \end{enumerate}
 
     \item \textbf{Example 5.5. Bayesian Persuasion.} The Governor calls the President and claims that there's an epidemic in his province, asking for a relief fund.
 
@@ -1666,7 +1670,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
             U_i(D_0) = 2
         \end{cases}
         \]
-        \item Solving, we can find \(U_i(C) \ge U_i(D_k)\) if and only if \(\delta \ge \frac{1}{2}\). 
+        \item Solving, we can find \(U_i(C) \ge U_i(D_0)\) if and only if \(\delta \ge \frac{1}{2}\). 
         \item \textbf{One-shot deviation principle}: A strategy profile is an SPE if and only if no player has profitable deviation in any round of game.
         \item Thus, both players playing grim trigger is an SPE if and only if \(\delta \ge \frac{1}{2}\).
     \end{itemize}
@@ -1695,7 +1699,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
             \[
             U_i(Dev_2) = 2
             \]
-            \item Solving, we have \(U_i(C) > U_i(Dev_1)\) if and only if \(\delta \ge \frac{1}{2}\).
+            \item Solving, we have \(U_i(C) > U_i(Dev_2)\) if and only if \(\delta \ge \frac{1}{2}\).
         \end{itemize}
         \item Alternate defect and cooperate repeatedly (\(D,C,D,C,\dots\):
         \begin{itemize}
@@ -1703,7 +1707,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
             \[
             U_i(Dev_3) = \sum_{t=0}^\infty 2\delta^{2t} - \sum_{t=0}^\infty \delta^{2t+1} = \frac{2-\delta}{1-\delta^2}
             \]
-            \item Solving, we have \(U_i(C) > U_i(Dev_1)\) if and only if \(\delta \ge \frac{1}{2}\).
+            \item Solving, we have \(U_i(C) > U_i(Dev_3)\) if and only if \(\delta \ge \frac{1}{2}\).
         \end{itemize}
     \end{enumerate}
     \begin{itemize}
@@ -1729,7 +1733,7 @@ This is a set of notes for ECON 4124: Applied Game Theory at HKUST. Content is b
         \end{align*}
 
     \end{itemize}
-    \item \textbf{Theorem 6.3. (Mininax Theorem)} If \(u_1(a_1, a_2) = -u_2(a_1, a_2)\) for all \(a_1 \in A_1\) and \(a_2 \in A_2\), then:
+    \item \textbf{Theorem 6.3. (Minimax Theorem)} If \(u_1(a_1, a_2) = -u_2(a_1, a_2)\) for all \(a_1 \in A_1\) and \(a_2 \in A_2\), then:
     \[
     \max_{\sigma_1 \in \Delta(A_1)} \min_{\sigma_2 \in \Delta(A_2)} U_1(\sigma_1, \sigma_2) = \min_{\sigma_2 \in \Delta(A_2)} \max_{\sigma_1 \in \Delta(A_1)}  U_1(\sigma_1, \sigma_2)
     \]
