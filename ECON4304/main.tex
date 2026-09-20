@@ -822,6 +822,8 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \begin{align*} \begin{bmatrix} y_{1t} \\ \textcolor{red}{y_{2t}} \\ y_{3t} \end{bmatrix} &= \begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix} + \begin{bmatrix} m_{0,11} & m_{0,12} & m_{0,13} \\ m_{0,21} & m_{0,22} & m_{0,23} \\ m_{0,31} & m_{0,32} & m_{0,33} \end{bmatrix} \begin{bmatrix} \tilde{\varepsilon}_{1t} \\ \tilde{\varepsilon}_{2t} \\ \tilde{\varepsilon}_{3t} \end{bmatrix} + \begin{bmatrix} m_{1,11} & m_{1,12} & m_{1,13} \\ m_{1,21} & m_{1,22} & m_{1,23} \\ m_{1,31} & m_{1,32} & m_{1,33} \end{bmatrix} \begin{bmatrix} \tilde{\varepsilon}_{1,t-1} \\ \tilde{\varepsilon}_{2,t-1} \\ \tilde{\varepsilon}_{3,t-1} \end{bmatrix} \\
     & + \begin{bmatrix} m_{2,11} & m_{2,12} & m_{2,13} \\ m_{2,21} & m_{2,22} & \textcolor{red}{m_{2,23}} \\ m_{2,31} & m_{2,32} & m_{2,33} \end{bmatrix} \begin{bmatrix} \tilde{\varepsilon}_{1,t-2} \\ \tilde{\varepsilon}_{2,t-2} \\ \textcolor{red}{\tilde{\varepsilon}_{3,t-2}} \end{bmatrix} + \cdots \end{align*}
     If \(\tilde{\varepsilon}_{3,t-2}\) increases by 1 unit, then \(y_{2t}\) will increase by \(m_{2,23}\) units. Hence, the (2,3)-element of \(\mathbf{M}_2\), \(m_{2,23}\), is the IRF for \(y_{2,{t+2}}\) with respect to \(\tilde{\varepsilon}_{3,t}\).
+
+    \item \textbf{The price puzzle}: If we fit a simple recursive VAR using inflation, unemployment, and interest rate using real life data, the IRF will show that a positive shock in \(r_t\) will cause an increase in \(\pi_t\) in the short term, contrary to theory.
 \end{itemize}
 
 \subsection{Forecasting with VAR}
@@ -1017,7 +1019,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \[
     \frac{\partial \mathbb{E}[y_{t+j}\mid I_t]}{\partial u_t} = \frac{\partial y_t}{\partial u_t} + \sum_{i=1}^j \phi^i \frac{\partial z_t}{\partial u_t} = \frac{\partial z_t}{\partial u_t} + \sum_{i=1}^j \phi^i \frac{\partial z_t}{\partial u_t} = 1 + \sum_{i=1}^j \phi^i = \sum_{i=0}^j \phi^i = \frac{1-\phi^{j+1}}{1-\phi}
     \]
-    From the decomposition (the first step), can see that a shock impacts \(\mathbb{E}[y_{t+j}\mid I_t]\) through both \(y_t\) and \(z_t\). As \(j \to \infty\), we have:
+    From the decomposition (the first step), we can see that a shock impacts \(\mathbb{E}[y_{t+j}\mid I_t]\) through both \(y_t\) and \(z_t\). As \(j \to \infty\), we have:
     \[
     \lim_{j\to\infty} \frac{\partial \mathbb{E}[y_{t+j}\mid I_t]}{\partial u_t} = \frac{1}{1-\phi}
     \]
@@ -1026,6 +1028,19 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \item Historically, economists widely believed that log real GDP and other macroeconomic variables are trend-stationary. However, Nelson and Plosser (1982) could not reject the hypothesis that those follows a unit root process, suggesting that they are difference-stationary. This implied that a shock may have permanent effect on the variables, instead of reverting to a long-term growth path.
 
     \item Therefore, we are more interested in difference-stationary trends.
+
+    \item An example:
+    \begin{itemize}
+        \item Suppose the long-term trend \(Y_t^\text{trend}\) follows a steady growth rate \(g\), then:
+        \[
+        Y_t^\text{trend}  = Y_0^\text{trend} \cdot (1+g)^t \implies \ln Y_t^\text{trend}  = \ln Y_0^\text{trend} + t \cdot \ln(1+g) \approx \ln Y_0^\text{trend} + t \cdot g
+        \]
+        which is a linear, deterministic trend. We're interested in the true data generating process, where:
+        \[
+        \ln Y_t = \ln Y_0^\text{trend} + t \cdot g + z_t
+        \]
+        The question is then whether \(z_t\) is stationary or a unit root process.
+    \end{itemize}
 \end{itemize}
 
 \subsection{Difference-stationary and Unit Root Processes}
@@ -1035,9 +1050,9 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \begin{itemize}
         \item \(y_t \sim I(0)\): \(y_t\) is a stationary process.
         \item \(y_t \sim I(1)\): \(y_t\) is not stationary, but its 1st difference, \(\Delta y_t\), is stationary.
-        \item \(y_t \sim I(2)\): \(y_t\) is not stationary, but \(\Delta(\Delta y_t)\) is.
+        % \item \(y_t \sim I(2)\): \(y_t\) is not stationary, but \(\Delta(\Delta y_t)\) is.
     \end{itemize}
-    \item Since an \(I(d)\) process becomes stationary after taking its \(d\)-th difference, the \(d\)-th difference can be put into an ARMA. We call it an ARIMA(\(p,d,q\)). For example, for an \(I(1)\) process, ARIMA(\(p,1,q\)) is simply an ARMA(\(p,q\)) for \(\Delta y_t\).
+    \item Since an \(I(d)\) process becomes stationary after taking its \(d\)-th difference, the \(d\)-th difference can be put into an ARMA, which call it an ARIMA(\(p,d,q\)). For example, for an \(I(1)\) process, ARIMA(\(p,1,q\)) is simply an ARMA(\(p,q\)) for \(\Delta y_t\).
     \item We focus on \(I(0)\) and \(I(1)\). Furthermore, for \(I(1)\), we focus on unit root processes, including the following different cases of random walks:
     \begin{enumerate}
         \item Random walk without drift:
@@ -1058,7 +1073,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
         \]
     \end{enumerate}
     where \(\phi=1\) for all cases if they are random walks.
-    \item To conduct unit root tests for a dataset, we apply the \textbf{Augmented Dickey-Fuller (ADF) test} for all these cases, where:
+    \item To test whether these is a unit root for a dataset, the \textbf{Augmented Dickey-Fuller (ADF) test} is suitable for all these cases, where:
     \begin{itemize}
         \item \(H_0\): The time series has a unit root \(\iff \phi=1\).
         \item \(H_1\): \(-1<\phi<1\)
