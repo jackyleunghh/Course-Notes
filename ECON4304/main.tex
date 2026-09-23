@@ -36,13 +36,13 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \begin{itemize}
         \item Understanding past data, forecasting future data.
     \end{itemize}
-    \item Some features in real-life time series:
+    \item Some features that might be seen in real-life time series:
     \begin{itemize}
         \item Trend, Seasonality, Cyclicality, and Irregularity.
         \item Current shock \(u_t\) tends to affect both present variable \(y_t\) and future variables \(y_{t+1}, y_{t+2}, \dots\).
         \item Structural breaks (sudden changes over time) in mean, variance, and/or regression coefficients.
         \item Spurious regression: Strong relationship between completely unrelated time series variables.
-        \item Autocorrelated: The present observation is correlated with both past and future observations:
+        \item Autocorrelated: The present observation is correlated with both past and future observations. For example:
         \[
         \Cov(y_{t-1}, y_t) \ne 0, \; \Cov(y_t, y_{t+1}) \ne 0
         \]
@@ -53,14 +53,13 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
 
 \begin{itemize}
     \item Our models and forecasting primarily focus on \textbf{covariance stationary}, or simply \textbf{stationary} time series data, which has the following properties:
-    \begin{align*}
-        \mathbb{E}[y_t] &=\mu < \infty \\
-        \mathbb{E}[(y_t-\mu)^2] &= \Var(y_t) < \infty \\
-        \mathbb{E}[(y_t-\mu)(y_{t+j}-\mu)] &= \Cov(y_t, y_{t+j}) = \gamma_j < \infty \text{ for all } j = 0, 1, 2, \dots
-    \end{align*}
-    \item \(\gamma_j\) is called \textbf{autocovariance}. Note that \(\gamma_0 = \Var(y_t)\).
-    \item Mean, variance, and autocovariance do not change over time for a stationary process.
-    \item For a stationary process, \(\Cov(y_{t-j}, y_t) = \Cov(y_t, y_{t+j}) = \gamma_j\).
+    \begin{itemize}
+        \item \(\mathbb{E}[y_t] =\mu < \infty\)
+        \item \(\mathbb{E}[(y_t-\mu)^2] = \Var(y_t) = \gamma_0 < \infty\)
+        \item \(\mathbb{E}[(y_t-\mu)(y_{t+j}-\mu)] = \Cov(y_t, y_{t+j}) = \gamma_j < \infty \text{ for all } j = 0, 1, 2, \dots\)
+    \end{itemize}
+    \item \(\gamma_j\) is called \textbf{autocovariance}. % Note that \(\gamma_0 = \Var(y_t)\).
+    \item Mean, variance, and autocovariance do not change over time for a stationary process, so we expect yesterday, today, and tomorrow to be the same. For example, \(\mathbb{E}[y_t] = \mathbb{E}[y_{t-j}]\), and \(\Cov(y_{t-j}, y_t) = \Cov(y_t, y_{t+j}) = \gamma_j\).
     \item Some examples of stationary/nonstationary processes:
     \begin{itemize}
         \item A growing trend is not stationary as the mean is increasing over time.
@@ -73,7 +72,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
         \[
         y_t = u_t
         \]
-        where \(\mathbb{E}[u_t]=0, \Var(u_t)=\gamma_0=\sigma^2\) and \(\gamma_j = 0\) by definition, which is stationary. Oftentimes we take \(u_t \overset{\text{i.i.d.}}{\sim} \mathcal{N}(0,\sigma^2)\).
+        where \(\mathbb{E}[u_t]=0, \Var(u_t)=\gamma_0=\sigma^2\) and \(\gamma_j = 0\) for all \(j>0\) by definition, which is stationary. For example, \(u_t \overset{\text{i.i.d.}}{\sim} \mathcal{N}(0,\sigma^2)\) is a white noise. % Also note that from now on we reserve the notation \(\sigma^2\) for \(\Var(u_t)\) instead of \(\Var(y_t)\).
 
         \begin{center}
             \includegraphics[width=0.5\linewidth, trim={0 0.5cm 0 1.5cm},clip]{whitenoise.png}
@@ -179,9 +178,9 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \end{cases}
     \]
     Solving for \(j=1,2\), we can get \(\rho_1 = \frac{\phi_1}{1-\phi_2}\), \(\rho_2 = \frac{\phi_1^2}{1-\phi_2}+\phi_2\), and the rest can be solved by iterated substitution in the last equation.
-    \item The ACF for both AR(1) and AR(2) are persistent ($\ne 0$) for all \(j\), why?
+    \item In the equations, AR(1) and AR(2) only have a limited number of lags, which means \(y_t\) is only ``directly" associated with \(y_{t-1}\) (and \(y_{t-2}\)).  But their ACFs are persistent ($\ne 0$) for all \(j\), why?
     \begin{itemize}
-        \item To find the association between \(y_{t-j}\) and \(y_t\), there is always a path of propagation through \(y_{t-j+1}, \dots, y_{t-1}\).
+        \item To find the association between \(y_{t-j}\) and \(y_t\), there is always a path of ``indirect" propagation through \(y_{t-j+1}, \dots, y_{t-1}\).
         \item Is there a more ``direct" way of measurement?
     \end{itemize}
     \item We can study the \textbf{partial autocorrelation function}, PACF(\(j\)).
@@ -189,7 +188,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \[
     y_t = c + \phi_{j,1} y_{t-1} + \dots + \phi_{j,j}y_{t-j} + u_t
     \]
-    PACF(\(j\)) is defined as \(\phi_{j,j}\), which can be understood as the direct association between \(y_{t-j}\) and \(y_t\).
+    PACF(\(j\)) is defined as \(\phi_{j,j}\), which can be understood as the direct association between \(y_{t-j}\) and \(y_t\). 
     \item For an AR(\(p\)), we look at several cases:
 
 \begin{enumerate}
@@ -201,12 +200,13 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \[
     \Cov(y_t,y_{t-1}) = \phi_{1,1} \Var(y_{t-1}) \implies \phi_{1,1} =\frac{\Cov(y_t,y_{t-1})}{\Var(y_{t})} = \rho_1
     \]
-    which implies PACF(1)=ACF(1) always.
+    which implies PACF(1)=ACF(1) always. Note that this property holds for any model, not only AR(\(p\)).
     \item \(1 < j < p\): PACF(\(j\))$\ne$ACF(\(j\)) in general, because PACF takes away the effects of lower lags.
     \item \(j = p\): The regression is equivalent to the true model AR(\(p\)), thus PACF(\(p\)) = \(\phi_{p,p} = \phi_p\).
     \item \(j > p\): Since the regression best fits to AR(p), the regression coefficients for all \(j>p\) evaluate to 0, thus PACF(\(j\)) = 0 for all \(j>p\).
 \end{enumerate}
 
+    \item Aside from regression using OLS, the PACF can also be derived by Yule-Walker equations with a method called Durbin-Levinson algorithm, which is out of scope here.
     \item So far we have been discussing the \textbf{model-implied} ACF and PACF, what about the actual time series data, given by a dataset \(\{y_1, \dots, y_T\}\)?
     \item Like a regular dataset, we can compute some sample parameters, namely:
 
@@ -223,7 +223,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \hat{\rho}_j = \frac{\hat{\gamma}_j}{\hat{\gamma}_0}
     \]
     which is the \textbf{sample ACF}.
-    \item Sample PACF is still computed by regression.
+    \item Sample PACF is still computed by regression or Durbin-Levinson algorithm.
     \item Once we have the sample ACF and PACF, we can fit our data to a model that has similar model-implied ACF and PACF. Specifically, we can look at the confidence interval to determine if they are significantly different from 0.
     \begin{center}
         \includegraphics[width=0.5\linewidth]{sampleacf.png}
@@ -393,7 +393,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
 \subsection{Model Selection}
 
 \begin{itemize}
-    \item While we can choose the parameters (\(p,q\)) by looking at the sample ACF and PACF, often times we still have multiple candidates.
+    \item While we can choose the parameters (\(p,q\)) by looking at the sample ACF and PACF, oftentimes we still have multiple candidates.
     \item We can use something called \textbf{information criteria}, for example:
     \begin{align*}
         \text{AIC} &= 2\ln(\hat{\delta}) + \frac{2k}{T} \\
@@ -758,7 +758,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
         \sigma_2^2 = a_{21}^2 + a_{22}^2
     \end{cases}
     \]
-    Because \(\sigma_{12}=\sigma_{21}\), the 2nd and 3rd equations are the same, which means we have 4 variables to be identified but only 3 equations. This is a \textbf{under-identification problem}.
+    Because \(\sigma_{12}=\sigma_{21}\), the 2nd and 3rd equations are the same, which means we have 4 variables to be identified but only 3 unique equations. This is a \textbf{under-identification problem}.
     \item A simple solution: Let \(a_{12}=0\). This way, we assume \(y_1\) is not affected by \(\tilde\varepsilon_{2t}\), i.e. no contemporaneous effect.
     \item Generalizing to more variables, we assume \(\tilde{\mathbf{A}}\) to be a lower triangular matrix to reduce the number of variables. 
     \begin{itemize}
@@ -849,7 +849,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \[
     \boldsymbol{\Omega}_t(h) = \mathbf{M}_0 \boldsymbol{\Sigma}_{\tilde{\boldsymbol{\varepsilon}}_{t+h}} \mathbf{M}_0^T + \mathbf{M}_1 \boldsymbol{\Sigma}_{\tilde{\boldsymbol{\varepsilon}}_{t+h-1}} \mathbf{M}_1^T  + \dots + \mathbf{M}_{h-1} \boldsymbol{\Sigma}_{\tilde{\boldsymbol{\varepsilon}}_{t+1}} \mathbf{M}_{h-1}^T = \mathbf{M}_0 \mathbf{M}_0^T + \mathbf{M}_1 \mathbf{M}_1^T  + \dots + \mathbf{M}_{h-1} \mathbf{M}_{h-1}^T
     \]
-    Since the diagonal along the variance-covariance matrix is the variance of each element, we can find the variance for \(e_{i,t}(h)\) on the (\(i,i\))-element of \(\Omega_h\), which is computed by:
+    Since the diagonal along the variance-covariance matrix is the variance of each element, we can find the variance for \(e_{i,t}(h)\) on the (\(i,i\))-element of \(\boldsymbol{\Omega}_t(h)\), which is computed by:
     \[
     [\boldsymbol{\Omega}_t(h)]_{i,i} = \sum_{k=0}^{h-1} \| \mathbf{m}_{k,i} \|^2 = \sum_{k=0}^{h-1} m_{k,i1}^2 + m_{k,i2}^2 + \dots + m_{k,in}^2
     \]
@@ -1025,19 +1025,19 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \]
     which means a one-unit shock to \(u_t\) will cause a impact of \(\frac{1}{1-\phi}\) units to \(\lim_{j\to\infty} \mathbb{E}[y_{t+j} \mid I_t]\) in the long run. That is, the shock is \textbf{permanent}.
 
-    \item Historically, economists widely believed that log real GDP and other macroeconomic variables are trend-stationary. However, Nelson and Plosser (1982) could not reject the hypothesis that those follows a unit root process, suggesting that they are difference-stationary. This implied that a shock may have permanent effect on the variables, instead of reverting to a long-term growth path.
+    \item Historically, economists widely believed that log real GDP and other macroeconomic variables were trend-stationary. However, Nelson and Plosser (1982) could not reject the null hypothesis of a unit root for most of these series, suggesting instead that they are difference-stationary. This implied that macroeconomic shocks have permanent effects on output levels rather than allowing the series to revert to a deterministic long-run growth path. Perron (1989) subsequently challenged this conclusion, arguing that standard unit root tests misspecified structural breaks as unit roots, thereby sparking an enduring debate in empirical macroeconomics.
 
-    \item Therefore, we are more interested in difference-stationary trends.
+    \item Either way, this prompted us to study more about difference-stationary trends in the next sections.
 
-    \item An example:
+    \item A simple example (without structural break):
     \begin{itemize}
         \item Suppose the long-term trend \(Y_t^\text{trend}\) follows a steady growth rate \(g\), then:
         \[
-        Y_t^\text{trend}  = Y_0^\text{trend} \cdot (1+g)^t \implies \ln Y_t^\text{trend}  = \ln Y_0^\text{trend} + t \cdot \ln(1+g) \approx \ln Y_0^\text{trend} + t \cdot g
+        Y_t^\text{trend}  = Y_0 \cdot (1+g)^t \implies \ln Y_t^\text{trend}  = \ln Y_0 + t \cdot \ln(1+g) \approx \ln Y_0 + t \cdot g
         \]
         which is a linear, deterministic trend. We're interested in the true data generating process, where:
         \[
-        \ln Y_t = \ln Y_0^\text{trend} + t \cdot g + z_t
+        \ln Y_t = \ln Y_0 + t \cdot g + z_t
         \]
         The question is then whether \(z_t\) is stationary or a unit root process.
     \end{itemize}
@@ -1050,10 +1050,10 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \begin{itemize}
         \item \(y_t \sim I(0)\): \(y_t\) is a stationary process.
         \item \(y_t \sim I(1)\): \(y_t\) is not stationary, but its 1st difference, \(\Delta y_t\), is stationary.
-        % \item \(y_t \sim I(2)\): \(y_t\) is not stationary, but \(\Delta(\Delta y_t)\) is.
+        \item \(y_t \sim I(2)\): \(y_t\) is not stationary, but \(\Delta(\Delta y_t)\) is.
     \end{itemize}
     \item Since an \(I(d)\) process becomes stationary after taking its \(d\)-th difference, the \(d\)-th difference can be put into an ARMA, which call it an ARIMA(\(p,d,q\)). For example, for an \(I(1)\) process, ARIMA(\(p,1,q\)) is simply an ARMA(\(p,q\)) for \(\Delta y_t\).
-    \item We focus on \(I(0)\) and \(I(1)\). Furthermore, for \(I(1)\), we focus on unit root processes, including the following different cases of random walks:
+    \item We focus on \(I(0)\) and \(I(1)\). \(I(1)\) processes are unit root processes, including but not limited to the following different cases of random walks:
     \begin{enumerate}
         \item Random walk without drift:
         \[
@@ -1073,7 +1073,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
         \]
     \end{enumerate}
     where \(\phi=1\) for all cases if they are random walks.
-    \item To test whether these is a unit root for a dataset, the \textbf{Augmented Dickey-Fuller (ADF) test} is suitable for all these cases, where:
+    \item To test whether these is a unit root for a dataset, the \textbf{Augmented Dickey-Fuller (ADF) test} is suitable for the above cases, where:
     \begin{itemize}
         \item \(H_0\): The time series has a unit root \(\iff \phi=1\).
         \item \(H_1\): \(-1<\phi<1\)
@@ -1182,7 +1182,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \end{enumerate}
     \begin{itemize}
         \item If \(r=0\), then it is equivalent to the first case. If \(r=n\), then all components are stationary, which means a VAR is sufficient.
-        \item While \(\boldsymbol{\beta}\), the matrix of cointegrating vectors, dictates the long-run relationship, \(\boldsymbol{\alpha}\) acts as a matrix of \textbf{adjustment coefficients} that controls the direction and magnitude of the variables in the short term.
+        \item While \(\boldsymbol{\beta}\), the matrix of cointegrating vectors, dictates the long-run relationship, \(\boldsymbol{\alpha}\) acts as a matrix of \textbf{adjustment coefficients} that controls the direction and magnitude of the variable movements in the short term.
     \end{itemize}
     \item For example, consider a simple two-variable case, where:
     \[
@@ -1192,7 +1192,7 @@ These notes are for ECON 4304: Time Series Econometrics and Business Forecasting
     \[
     \begin{bmatrix} \Delta x_t \\ \Delta y_t \end{bmatrix} = \begin{bmatrix} 0.4 \\ -0.2\end{bmatrix} \begin{bmatrix} -1 & 1 \end{bmatrix} \begin{bmatrix} x_{t-1} \\ y_{t-1} \end{bmatrix} + \begin{bmatrix} u_{xt} \\ u_{yt} \end{bmatrix} = \begin{bmatrix} 0.4(y_{t-1} - x_{t-1}) + u_{xt} \\ -0.2 (y_{t-1} - x_{t-1}) + u_{yt}\end{bmatrix}
     \]
-    Suppose there is a positive gap where \(y_{t-1} - x_{t-1} = 1\), then \(\Delta x_t = 0.4 + u_{xt}\) and \(\Delta y_t = -0.2 + u_{yt}\). As \(x_t\) is more likely to increase and \(y_t\) is more likely to decrease, \(y_{t} - x_{t}\) is expected to decrease towards the stationary level.
+    Suppose there was a positive gap where \(y_{t-1} - x_{t-1} = 1\), then \(\Delta x_t = 0.4 + u_{xt}\) and \(\Delta y_t = -0.2 + u_{yt}\). As \(x_t\) is more likely to increase and \(y_t\) is more likely to decrease, \(y_{t} - x_{t}\) is expected to decrease towards the stationary level.
 
 \end{itemize}
 
